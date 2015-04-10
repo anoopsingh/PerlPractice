@@ -1,0 +1,620 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>SIPP</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:none" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+	<li><a href="#important">IMPORTANT</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<ul>
+
+		<li><a href="#methods">METHODS</a></li>
+		<ul>
+
+			<li><a href="#genband__sipp__startbackground__command__">Genband::SIPP::startBackground(&lt;command&gt;)</a></li>
+			<li><a href="#genband__sipp__gracefulstop__timeout__">Genband::SIPP::gracefulStop(&lt;timeout&gt;)</a></li>
+			<li><a href="#genband__sipp__hardstop__timeout__">Genband::SIPP::hardStop(&lt;timeout&gt;)</a></li>
+			<li><a href="#genband__sipp__startsingleshot__command__">Genband::SIPP::startSingleShot(&lt;command&gt;)</a></li>
+			<li><a href="#genband__sipp__startserver__command__">Genband::SIPP::startServer(&lt;command&gt;)</a></li>
+			<li><a href="#genband__sipp__startclient__command__">Genband::SIPP::startClient(&lt;command&gt;)</a></li>
+			<li><a href="#genband__sipp__startcustomserver__command__">Genband::SIPP::startCustomServer(&lt;command&gt;)</a></li>
+			<li><a href="#genband__sipp__startcustomclient__command__">Genband::SIPP::startCustomClient(&lt;command&gt;)</a></li>
+			<li><a href="#genband__sipp__waitcompletion__timeout__">Genband::SIPP::waitCompletion(&lt;timeout&gt;)</a></li>
+			<li><a href="#genband__sipp__waitcompletionserver_timeout_">Genband::SIPP::waitCompletionServer(timeout)</a></li>
+			<li><a href="#genband__sipp__waitcompletionclient_timeout_">Genband::SIPP::waitCompletionClient(timeout)</a></li>
+			<li><a href="#genband__sipp__destroy">Genband::SIPP::DESTROY</a></li>
+			<li><a href="#genband__sipp__createcsvfile__">Genband::SIPP::createcsvfile()</a></li>
+			<li><a href="#genband__sipp__appendtocsvfile__">Genband::SIPP::appendToCSVFile()</a></li>
+			<li><a href="#genband__sipp__execcmd__">Genband::SIPP::execCmd()</a></li>
+			<li><a href="#genband__sipp__getcurcountstats__">Genband::SIPP::getCurCountStats()</a></li>
+			<li><a href="#genband__sipp__getcurmsgretranscnt____genband__sipp__getcurmsgtimeoutcnt____genband__sipp__getcurunexpmsgcnt____genband__sipp__getcurmsgcnt__">Genband::SIPP::getCurMsgRetransCnt(), Genband::SIPP::getCurMsgTimeoutCnt(), Genband::SIPP::getCurUnexpMsgCnt(), Genband::SIPP::getCurMsgCnt()</a></li>
+			<li><a href="#genband__sipp__getfinalstats__">Genband::SIPP::getFinalStats()</a></li>
+			<li><a href="#genband__sipp__getstatsbytype__">Genband::SIPP::getStatsByType()</a></li>
+		</ul>
+
+	</ul>
+
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Genband::SIPP- Perl module for SIPP control.</p>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Ramesh Pateel (Ram)</p>
+<p>
+</p>
+<hr />
+<h1><a name="important">IMPORTANT</a></h1>
+<p><strong>This module is a work in progress, it should work as described, but has not undergone extensive testing.</strong></p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+   use ATS;           # This is the base class for Automated Testing Structure
+   
+   my $obj = Genband::SIPP-&gt;new(-OBJ_HOST =&gt; '&lt;host name | IP Adress&gt;',
+                               -OBJ_USER =&gt; '&lt;cli user name - usually root&gt;',
+                               -OBJ_PASSWORD =&gt; '&lt;cli user password&gt;',
+                               -OBJ_COMMTYPE =&gt; &quot;&lt;TELNET|SSH&gt;&quot;,
+                               optional args
+                               -cmdline =&gt; &quot;&lt;sipp command line options, e.g. -sn uac -p 1234 -trace_err etc.&gt;&quot;
+                               );
+                               note: -bg will be appended -cmdline to run SIPP when the background methods are
+                               called, and will be stripped (if provided) when invoking the single-shot methods.
+    
+=head1 REQUIRES</pre>
+<p>Perl5.18, Log::Log4perl, Genband::Base, Genband::Utils, Data::Dumper, POSIX</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>This module provides an interface for the SIPP test tool.
+It provides methods for starting and stopping single-shot and load testing, most cli methods returning true or false (0|1).
+Control of command input is up to the QA Engineer using this class, most methods accept a key/value hash, 
+allowing the engineer to specific which attributes to use.</p>
+<p>
+</p>
+<h2><a name="methods">METHODS</a></h2>
+<p>
+</p>
+<h3><a name="genband__sipp__startbackground__command__">Genband::SIPP::startBackground(&lt;command&gt;)</a></h3>
+<dl>
+<dt>
+<dd>
+<pre>
+    Start SIPP in the background, used for load testing.
+    If &lt;command&gt; is specified, it is expected to be a well formatted set of sipp command line options,
+    
+Example:
+    
+    $obj-&gt;startBackground('-sf ram.xml -r 100 -d 1500 -l 6000 10.31.200.60');
+    the -bg (background) option is forced on by this method if not specified by the user.</pre>
+<p>Returns:</p>
+<pre>
+    (Set's $self-&gt;{PID} to the PID of the started process).</pre>
+</dd>
+</dl>
+<p>
+</p>
+<h3><a name="genband__sipp__gracefulstop__timeout__">Genband::SIPP::gracefulStop(&lt;timeout&gt;)</a></h3>
+<dl>
+<dt>
+<dd>
+<pre>
+    Send a SIGUSR1 (equivalent to pressing 'q' from the Gui, to cause SIPP to stop
+    making new calls and exit once all existing calls are done.
+  
+    &lt;timeout&gt; in seconds is the number of seconds to wait for the SIPP application to finish,
+    a general rule of thumb is to set this to your call hold time plus a fudge factor.
+  
+    Used only for background SIPP instances (started with startBackground()
+  
+Returns:</pre>
+<pre>
+    1 on successful termination
+    0 on timeout.</pre>
+</dd>
+</dl>
+<p>
+</p>
+<h3><a name="genband__sipp__hardstop__timeout__">Genband::SIPP::hardStop(&lt;timeout&gt;)</a></h3>
+<dl>
+<dt>
+<dd>
+<pre>
+    Send a SIGKILL to cause SIPP to exit immediately, possibly leaving calls hanging.
+    
+    &lt;timeout&gt; in seconds is the number of seconds to wait for the SIPP application to finish,
+    a general rule of thumb is to set this to your call hold time plus a fudge factor.
+  
+    Used only for background SIPP instances (started with startBackground()
+  
+Returns:</pre>
+<pre>
+    1 on successful termination
+    Calls &amp;error on timeout - SIGKILL is assumed to be an unstoppable force, if this
+    fails then we can't vouch for the state of the controlled system, so we might as well bail.</pre>
+</dd>
+</dl>
+<p>
+</p>
+<h3><a name="genband__sipp__startsingleshot__command__">Genband::SIPP::startSingleShot(&lt;command&gt;)</a></h3>
+<dl>
+<dt>
+<dd>
+<pre>
+    Starts SIPP in the foreground, useful for singleshot testing where we want to check the return code.
+    If &lt;command&gt; is specified, it is expected to be a well formatted set of sipp command line options,</pre>
+<p>Example:</p>
+<pre>
+
+       -sf ram.xml -r 100 -d 1500 -l 6000 172.23.91.150
+    The -bg option is stripped even if the user passes it in &lt;command&gt;.</pre>
+<pre>
+
+NOTE</pre>
+<pre>
+
+    This does not wait for the singleShot test to complete, see waitCompletion() below.</pre>
+<p>Returns:</p>
+<pre>
+    1 on success (Set's $self-&gt;{PID} to -1).
+    0 on failure to start.</pre>
+</dd>
+</dl>
+<p>
+</p>
+<h3><a name="genband__sipp__startserver__command__">Genband::SIPP::startServer(&lt;command&gt;)</a></h3>
+<dl>
+<dt>
+<dd>
+<pre>
+    Starts SIPP SERVER in the foreground, useful for singleshot testing where we want to check the return code.
+    If &lt;command&gt; is specified, it is expected to be a well formatted set of sipp command line options,
+    The -bg option is stripped even if the user passes it in &lt;command&gt;.
+        The path shall be read in from the SIPP.pm file itself
+        DEFAULT PATH IS :&lt;$self-&gt;{SIPPPATH}&gt; :  /gats/bin/sipp
+    Command passed shall not have the above path specified, as shown in example below</pre>
+<p>Example:</p>
+<pre>
+    my $cmd1 = &quot;-sf /SIPP/ram.xml -p 5091 -mp 1211 -m 1&quot;
+    $sippObj1-&gt;startServer($cmd1);
+    It shall be invoked after appending the path as :
+        /gats/bin/sipp -sf /SIPP/ram.xml -p 5091 -mp 1211 -m 1
+    
+NOTE:</pre>
+<pre>
+    this does not wait for the singleShot test to complete, see waitCompletionServer() below.</pre>
+<p>Returns:</p>
+<pre>
+    1 on success (Set's $self-&gt;{PID} to -1).
+    0 on failure to start.</pre>
+</dd>
+</dl>
+<p>
+</p>
+<h3><a name="genband__sipp__startclient__command__">Genband::SIPP::startClient(&lt;command&gt;)</a></h3>
+<dl>
+<dt>
+<dd>
+<pre>
+    Starts SIPP CLIENT in the foreground, useful for singleshot testing where we want to check the return code.
+    If &lt;command&gt; is specified, it is expected to be a well formatted set of sipp command line options,
+    The -bg option is stripped even if the user passes it in &lt;command&gt;.
+    The path shall be read in from the SIPP.pm file itself 
+        DEFAULT PATH IS :&lt;$self-&gt;{SIPPPATH}&gt; :  /gats/bin/sipp
+    Command passed shall not have the above path specified, as shown in example below 
+    my $cmd2 = &quot;-sf SIPP/ram.xml -s 988681234 -p 6091 10.34.20.114 -m 1 -mp 2345&quot;;
+    $sippObj2-&gt;startClient($cmd2);
+    It shall be invoked after appending the path as : 
+         /gats/bin/sipp -sf /SIPP/ram.xml -s 988681234 -p 6091 10.34.20.114 -m 1 -mp 2345
+         
+NOTE:</pre>
+<pre>
+    this does not wait for the singleShot test to complete, see waitCompletionClient() below.</pre>
+<p>Returns:</p>
+<pre>
+    1 on success (Set's $self-&gt;{PID} to -1).
+    0 on failure to start.</pre>
+</dd>
+</dl>
+<p>
+</p>
+<h3><a name="genband__sipp__startcustomserver__command__">Genband::SIPP::startCustomServer(&lt;command&gt;)</a></h3>
+<dl>
+<dt>
+<dd>
+<pre>
+    Starts CUSTOMIZED SIPP SERVER in the foreground, useful for singleshot testing where we want to check the return code.
+    If &lt;command&gt; is specified, it is expected to be a well formatted set of sipp command line options,
+    The -bg option is stripped even if the user passes it in &lt;command&gt;.
+    Command passed shall have the path to customized sipp specified as in example below
+    my $cmd1 = &quot;/&lt;user defined path&gt;/sipp -sf $sipppath$testcase.xml -m 1 -i $sipp_ip -p $calledport&quot;;
+    $sippObj1-&gt;startCustomServer($cmd2);
+    
+NOTE</pre>
+<pre>
+    This does not wait for the singleShot test to complete, see waitCompletionServer() below.</pre>
+<p>Returns:</p>
+<pre>
+
+       1 on success (Set's $self-&gt;{PID} to -1).
+       0 on failure to start.</pre>
+</dd>
+</dl>
+<p>
+</p>
+<h3><a name="genband__sipp__startcustomclient__command__">Genband::SIPP::startCustomClient(&lt;command&gt;)</a></h3>
+<dl>
+<dt>
+<dd>
+<pre>
+    Starts  CUSTOMIZED SIPP CLIENT in the foreground, useful for singleshot testing where we want to check the return code.
+    If &lt;command&gt; is specified, it is expected to be a well formatted set of sipp command line options,
+    The -bg option is stripped even if the user passes it in &lt;command&gt;.
+    Command passed shall have the path to customized sipp specified as in example below  
+    my $cmd2 = &quot;/&lt;user defined path&gt;/sipp -sf $sipppath$test.xml -m 1 -i $sipp_ip -p $callingport $sbc_ssip:5060 -mp $mediaport1&quot;;
+    $sippObj2-&gt;startCustomClient($cmd2); 
+        
+NOTE:</pre>
+<pre>
+    This does not wait for the singleShot test to complete, see waitCompletionClient() below.</pre>
+<p>Returns:</p>
+<pre>
+    1 on success (Set's $self-&gt;{PID} to -1).
+    0 on failure to start.</pre>
+</dd>
+</dl>
+<p>
+</p>
+<h3><a name="genband__sipp__waitcompletion__timeout__">Genband::SIPP::waitCompletion(&lt;timeout&gt;)</a></h3>
+<dl>
+<dt>
+<dd>
+<pre>
+    Used to wait for a singleshot test to complete, timeout in seconds.</pre>
+<p>Returns:
+    1 if the test is complete and SIPP exit code does not indicate any failures.
+    If CMDERRORFLAG is FALSE
+    0 if either a timeout occurs, or the test fails
+    If CMDERRORFLAG is TRUE
+        calls the Genband::Utils::error() method</p>
+</dd>
+</dl>
+<p>
+</p>
+<h3><a name="genband__sipp__waitcompletionserver_timeout_">Genband::SIPP::waitCompletionServer(timeout)</a></h3>
+<dl>
+<dt>
+<dd>
+<pre>
+    This subroutine shall be used to wait for the completion of server instance</pre>
+<p>Returns:
+    1 if the test is complete and SIPP exit code does not indicate any failures.
+    If CMDERRORFLAG is FALSE
+        0 if either a timeout occurs, or the test fails
+    If CMDERRORFLAG is TRUE
+        calls the Genband::Utils::error() method</p>
+</dd>
+</dl>
+<p>
+</p>
+<h3><a name="genband__sipp__waitcompletionclient_timeout_">Genband::SIPP::waitCompletionClient(timeout)</a></h3>
+<dl>
+<dt>
+<dd>
+<p>This subroutine shall be used to wait for the completion of client instance</p>
+<p>Returns:
+    1 if the test is complete and SIPP exit code does not indicate any failures.
+    If CMDERRORFLAG is FALSE
+        0 if either a timeout occurs, or the test fails
+    If CMDERRORFLAG is TRUE
+        calls the Genband::Utils::error() method</p>
+</dd>
+</dl>
+<p>
+</p>
+<h3><a name="genband__sipp__destroy">Genband::SIPP::DESTROY</a></h3>
+<dl>
+<dt>
+<dd>
+<pre>
+    Override the DESTROY method inherited from Base.pm, we'll use this to attempt
+    to kill (forcefully) any running SIPP instances before we are destroyed.</pre>
+</dd>
+</dl>
+<p>
+</p>
+<h3><a name="genband__sipp__createcsvfile__">Genband::SIPP::createcsvfile()</a></h3>
+<dl>
+<dt>
+<dd>
+<pre>
+
+    This function enables dynamic creation of the csv file on the SIPP server. The name of the
+    file needs to be passed as an input argument. If the file is already present, then the
+    contents are cleared.</pre>
+<pre>
+
+Argument:</pre>
+<pre>
+
+    Name of the file.</pre>
+<p>Return:</p>
+<pre>
+
+    1: Success
+    0: Failure</pre>
+<p>Usage:</p>
+<pre>
+
+    my $csvResult = $sippObject-&gt;createcsvfile(&quot;/&lt;directory&gt;/sample.csv&quot;);
+    This would create a file sample.csv under /&lt;directory&gt;/ directory on the sipp server with the content
+    &quot;SEQUENTIAL&quot;.</pre>
+<pre>
+
+=back</pre>
+</dd>
+</dl>
+<p>
+</p>
+<h3><a name="genband__sipp__appendtocsvfile__">Genband::SIPP::appendToCSVFile()</a></h3>
+<dl>
+<dt>
+<dd>
+<pre>
+    This function is used to write to the csv file on the SIPP server created using createCSVfile.
+    The contents of the file needs to be passed as an input argument.
+    
+Argument: 
+ 
+    Contents of the file to be passed as an array.</pre>
+<p>Return:</p>
+<pre>
+
+    1: Success
+    0: Failure</pre>
+<p>usage:
+    my $csvResult = $sippObject-&gt;createcsvfile(&quot;/&lt;test&gt;/sample.csv&quot;);
+    unless($csvResult){
+        $logger-&gt;error(__PACKAGE__ .&quot;CSVFILE CREATION FAILED&quot;);
+        return 0;
+    }</p>
+<pre>
+
+    my @contents = (&quot;line1_data1;line1_data2;line1_data3&quot;,
+                    &quot;line2_data1;line2_data2;line2_data3&quot;,
+                    &quot;line3_data1;line3_data2;line3_data3&quot;);</pre>
+<pre>
+
+    my $csvResult = $sippObject-&gt;appendToCSVFile(@contents);
+    unless($csvResult){
+        $logger-&gt;error(__PACKAGE__ .&quot;CSVFILE UPDATION FAILED&quot;);
+        return 0;
+    }</pre>
+<pre>
+
+    This would create a file sample.csv under /&lt;test&gt; directory on the sipp server with the contents -
+    SEQUENTIAL
+    line1_data1;line1_data2;line1_data3
+    line2_data1;line2_data2;line2_data3
+    line3_data1;line3_data2;line3_data3</pre>
+<pre>
+
+=back</pre>
+</dd>
+</dl>
+<p>
+</p>
+<h3><a name="genband__sipp__execcmd__">Genband::SIPP::execCmd()</a></h3>
+<dl>
+<dt>
+<dd>
+<pre>
+    This function enables user to execute any command on the SIPP server.</pre>
+<p>Arguments:</p>
+<pre>
+    1. Command to be executed.
+    2. Timeout in seconds (optional).</pre>
+<p>Return Value:</p>
+<pre>
+    Output of the command executed.</pre>
+<p>Usage:</p>
+<pre>
+    my @results = $sippObject-&gt;execCmd(&quot;ls /test/sample.csv&quot;);
+    This would execute the command &quot;ls /test/sample.csv&quot; on the SIPP server and return the output of the command.</pre>
+</dd>
+</dl>
+<p>
+</p>
+<h3><a name="genband__sipp__getcurcountstats__">Genband::SIPP::getCurCountStats()</a></h3>
+<dl>
+<dt>
+<dd>
+<pre>
+    This function is used to read the last line of statistics written in the xxxxx_counts.csv file by sipp. SIPP dumps the statistics that is
+    displayed on the screen to a csv file when the -trace_counts option is set and this interface is used to read and return the value of the 
+    last line in the file. The duration at which sipp writes to the file can be controlled using the -fd option while invoking the sipp instance
+    using startClient/startServer/startCustomClient/startCustomServer interfaces.</pre>
+<p>Pre-requisites:</p>
+<pre>
+    1. SIPP Version used should be 3.1 or above.
+    2. -trace_counts option must be included while invoking sipp command without which the statistics file will not be created by sipp.</pre>
+<p>Arguments:</p>
+<pre>
+    Name of the xml scenario file without the extension.</pre>
+<p>Return Value:</p>
+<pre>
+    Hash containing the counter names as the key and the count as the value.</pre>
+<p>Usage:</p>
+<pre>
+    my %retHash = $sippObject-&gt;getCurCountStats(&quot;uas&quot;); # where uas.xml is the name of the scenario file</pre>
+</dd>
+</dl>
+<p>
+</p>
+<h3><a name="genband__sipp__getcurmsgretranscnt____genband__sipp__getcurmsgtimeoutcnt____genband__sipp__getcurunexpmsgcnt____genband__sipp__getcurmsgcnt__">Genband::SIPP::getCurMsgRetransCnt(), Genband::SIPP::getCurMsgTimeoutCnt(), Genband::SIPP::getCurUnexpMsgCnt(), Genband::SIPP::getCurMsgCnt()</a></h3>
+<dl>
+<dt>
+<dd>
+<pre>
+    These functions are used to return the current value of the various counts which are displayed on the sipp screen. 
+    A sample screen output is shown below -</pre>
+<p>------------------------------ Scenario Screen -------- [1-9]: Change Screen --
+  Call-rate(length)     Port   Total-time  Total-calls  Remote-host
+  10.0(0 ms)/1.000s   22055      0.00 s            0  10.34.17.172:5060(SCTP)</p>
+<pre>
+  0 new calls during 0.009 s period      9 ms scheduler resolution
+  0 calls (limit 30)                     Peak was 0 calls, after 0 s
+  0 Running, 0 Paused, 0 Woken up
+  0 out-of-call msg (discarded)
+  2 open sockets</pre>
+<pre>
+                                 Messages  Retrans   Timeout   Unexpected-Msg
+      INVITE ----------&gt;         0         0         0
+         100 &lt;----------         0         0                   0
+         180 &lt;----------         0         0                   0
+         183 &lt;----------         0         0                   0
+         200 &lt;----------  E-RTD1 0         0                   0
+         ACK ----------&gt;         0         0
+       Pause [      0ms]         0                             0
+         BYE ----------&gt;         0         0         0
+         200 &lt;----------         0         0                   0</pre>
+<p>------ [+|-|*|/]: Adjust rate ---- [q]: Soft exit ---- [p]: Pause traffic -----</p>
+<pre>
+    These functions are used to return the latest value of the Messages,Retrans,Timeout and Unexpected-Msg count which are 
+    displayed on the screen. SIPP writes these statistics to a file when the -trace_counts option is included while invoking 
+    the sipp instance.</pre>
+<p>PRE-REQUISITES:</p>
+<pre>
+    1. SIPP Version used should be 3.1 or above.
+    2. -trace_counts option must be specified while invoking sipp command.
+    3. -fd option must be used to specify the desired interval (in seconds) at which the statistics is to be written to the file. Default value is 60 seconds.</pre>
+<p>Arguments:</p>
+<pre>
+    1. Name of the xml scenario file without the extension.
+    2. Index of the message whose counter value is required.(Indexing starts with 0 and so the index of the first message will be 0)</pre>
+<p>Return Value:</p>
+<pre>
+    Latest value of the counter corresponding to the message.</pre>
+<p>Usage:</p>
+<pre>
+    To get the latest value of the number of INVITE messages that have been sent use getCurMsgCnt as follows-
+                               my $ret = $sippObject-&gt;getCurMsgCnt(&quot;uas&quot;,0);</pre>
+<pre>
+    To get the latest count of the number of 180 retransmissions, use getCurMsgRetransCnt as follows -
+                               my $ret = $sippObject-&gt;getCurMsgRetransCnt(&quot;uas&quot;,2);</pre>
+<pre>
+    To get the latest count of the number of BYE timeouts, use getCurMsgTimeoutCnt as follows -
+                               my $ret = $sippObject-&gt;getCurMsgTimeoutCnt(&quot;uas&quot;,7);</pre>
+<pre>
+    To get the latest count of the number of Unexpected messages received in place of 183, use getCurUnexpMsgCnt as follows -
+                               my $ret = $sippObject-&gt;getCurUnexpMsgCnt(&quot;uas&quot;,3);</pre>
+<pre>
+    where uas is the name of the xml file being used by the sipp instance and the second argument represents the index of the message.
+    The frequency at which the statistics are written to the file is controlled by the -fd option in sipp. Its default value is 60 seconds.
+    Please provide the -fd option with the desired time interval at which the statistics might be required while invoking the sipp instance.</pre>
+</dd>
+</dl>
+<p>
+</p>
+<h3><a name="genband__sipp__getfinalstats__">Genband::SIPP::getFinalStats()</a></h3>
+<dl>
+<dt>
+<dd>
+<pre>
+    This function is used to get the final statistics from sipp on the number of calls that were created, number of calls that were successful and the number of calls that failed.
+    Ensure that the -trace_screen option is used while invoking the sipp instance which will enable sipp to dump the final statistics to a file that will be read by this interface. 
+    This interface will return the Cumalative value of the Total Call Created, Successful Call and Failed Call as displayed on the final statistics screen before sipp exits. Hence 
+    ensure that you call this interface after sipp completes so that the file is written.</pre>
+<p>PRE-REQUISITES:</p>
+<pre>
+    1. -trace_screen option must be included while invoking sipp command without which the final statistics file will not be created by sipp.</pre>
+<p>Arguments:</p>
+<pre>
+    Name of the xml scenario file without the extension.</pre>
+<p>Return Value:</p>
+<pre>
+    Hash containing the counter names(TOTAL CALLS,SUCCESSFUL CALLS and FAILED CALLS) as the key and the count as the value.</pre>
+<p>Usage:</p>
+<pre>
+    my %retHash = $sippObject-&gt;getFinalStats(&quot;uas&quot;); # where uas.xml is the name of the scenario file
+    Contents of retHash would be as follows -
+          $retHash{&quot;TOTAL CALLS&quot;} = 100;
+          $retHash{&quot;SUCCESSFUL CALLS&quot;} = 100;
+          $retHash{&quot;FAILED CALLS&quot;} = 0;</pre>
+</dd>
+</dl>
+<p>
+</p>
+<h3><a name="genband__sipp__getstatsbytype__">Genband::SIPP::getStatsByType()</a></h3>
+<dl>
+<dt>
+<dd>
+<pre>
+    This function is used to get the sipp statics based on value of specific type.
+
+</pre>
+<p>PRE-REQUISITES:</p>
+<pre>
+    1. -trace_screen option must be included while invoking sipp command without which the final statistics file will not be created by sipp.
+
+</pre>
+<p>Arguments:
+    -keyName  =&gt; Type based on which statics has to be retrived
+    -keys     =&gt; values of above type , who statics has to be retrived
+    -required =&gt; required column from statics
+    -path     =&gt; path of statics csv file
+    -xmlFileName =&gt; Name of the xml scenario file without the extension
+    
+Return Value:</p>
+<pre>
+    Hash containing the value for the requested types.
+
+</pre>
+<p>Usage:</p>
+<pre>
+    my %args = ( -keyName =&gt; 'TargetRate', -keys =&gt; [20,30,40], -required =&gt; ['CurrentTime', 'OutgoingCall(C)'], -path =&gt; '/&lt;path&gt;/', -xmlFileName =&gt; 'PCR8005_01_UAC');
+    my %result = $Obj-&gt;getStatsByType(%args)
+
+</pre>
+<pre>
+    Contents of result hash would be as follows -
+          $result{20}-&gt;{'OutgoingCall(C)'} = 49;
+          $result{20}-&gt;{'CurrentTime'} = '2013-05-27,12:02:36';
+          $result{30}-&gt;{'OutgoingCall(C)'} = 148;
+          $result{30}-&gt;{'CurrentTime'} = '2013-05-27,12:02:41';
+          $result{40}-&gt;{'OutgoingCall(C)'} = 297;
+          $result{40}-&gt;{'CurrentTime'} = '2013-05-27,12:02:46'; 
+
+</pre>
+</dd>
+</dl>
+
+</body>
+
+</html>

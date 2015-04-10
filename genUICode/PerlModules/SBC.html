@@ -1,0 +1,267 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>SBC</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:none" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+	<li><a href="#important">IMPORTANT</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#requires">REQUIRES</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<ul>
+
+		<li><a href="#methods">METHODS</a></li>
+		<ul>
+
+			<li><a href="#genabnd__sbc__setsystem">Genabnd::SBC::setSystem</a></li>
+			<li><a href="#genabnd__sbc__execcmd__">Genabnd::SBC::execCmd()</a></li>
+			<li><a href="#genabnd__sbc__execclicmd__">Genabnd::SBC::execCliCmd()</a></li>
+			<li><a href="#genabnd__sbc__execshellcmd__">Genabnd::SBC::execShellCmd()</a></li>
+			<li><a href="#genabnd__sbc__execsystemclicmd">Genabnd::SBC::execSystemCliCmd</a></li>
+			<li><a href="#genabnd__sbc__closeconn">Genabnd::SBC::closeConn</a></li>
+		</ul>
+
+	</ul>
+
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Genband::SBC - Perl module for SBC interaction</p>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Ramesh Pateel (Ram)</p>
+<p>
+</p>
+<hr />
+<h1><a name="important">IMPORTANT</a></h1>
+<p><strong>This module is a work in progress, it should work as described, but has not undergone extensive testing.</strong></p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+   use ATS;  # This is the base class for Automated Testing Structure
+   
+   my $obj = Genabnd::SBC-&gt;new(-OBJ_HOST =&gt; '[ HOSTNAME | IP ADDRESS ]',
+                               -OBJ_USER =&gt; '&lt;cli user name&gt;',
+                               -OBJ_PASSWORD =&gt; '&lt;cli user password&gt;',
+                               -OBJ_COMMTYPE =&gt; '[ TELNET | SSH ]',
+                               -OBJ_PORT =&gt; '&lt;port&gt;'
+                               );</pre>
+<pre>
+   NOTE: port 22 for access to the Linux shell</pre>
+<p>
+</p>
+<hr />
+<h1><a name="requires">REQUIRES</a></h1>
+<p>Perl5.8.6, Log::Log4perl, Genband::Base, Genband::Utils, Data::Dumper, POSIX</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<pre>
+   This module provides an interface for Genabnd SBC.</pre>
+<p>
+</p>
+<h2><a name="methods">METHODS</a></h2>
+<p></p>
+<p>
+</p>
+<h3><a name="genabnd__sbc__setsystem">Genabnd::SBC::setSystem</a></h3>
+<pre>
+    This function sets the system information. The following variables are set if successful:
+                $self-&gt;{APPLICATION_VERSION}  = application version of sbc
+                                $self-&gt;{OS_VERSION} = operating system version
+                                $self-&gt;{ROLE} = current role of the sbc (active/standby)</pre>
+<p></p>
+<p>
+</p>
+<h3><a name="genabnd__sbc__execcmd__">Genabnd::SBC::execCmd()</a></h3>
+<dl>
+<dt>
+<dd>
+<p>DESCRIPTION:</p>
+<pre>
+     The function is the generic function to issue a command to the SBC. It utilises the mechanism of issuing a command and then waiting for the prompt stored in $self-&gt;{PROMPT}.</pre>
+<pre>
+     The following variable is set on execution of this function:</pre>
+<pre>
+     $self-&gt;{LASTCMD} - contains the command issued</pre>
+<pre>
+     As a result of a successful command issue and return of prompt the following variable is set:</pre>
+<pre>
+     $self-&gt;{CMDRESULTS} - contains the return information from the CLI command</pre>
+<pre>
+     There is no failure as such. What constitutes a &quot;failure&quot; will be when the expected prompt is not returned. It is highly recommended that the user parses the return from execCmd for both the expected string and error strings to better identify any possible cause of failure.</pre>
+<p>ARGUMENTS:</p>
+<pre>
+    1. The command to be issued to the CLI
+    2. Timeout.</pre>
+<p>PACKAGE:</p>
+<pre>
+    Genband::SBC</pre>
+<p>GLOBAL VARIABLES USED:</p>
+<pre>
+    None</pre>
+<p>EXTERNAL FUNCTIONS USED:</p>
+<pre>
+    None</pre>
+<p>OUTPUT:</p>
+<pre>
+
+    @cmdResults - either the information from the CLI on successful return of the expected prompt, or an empty array on timeout of the command.</pre>
+<p>EXAMPLE:</p>
+<pre>
+ my @result = $obj-&gt;execCmd( &quot;iserver all status&quot; , 10 );</pre>
+</dd>
+</dl>
+<p></p>
+<p>
+</p>
+<h3><a name="genabnd__sbc__execclicmd__">Genabnd::SBC::execCliCmd()</a></h3>
+<dl>
+<dt>
+<dd>
+<p>DESCRIPTION:</p>
+<pre>
+    The function is a wrapper around execCmd that also parses the output to look for SBC CLI specific strings: &quot;Usage: cli&quot;. It will then return 1 or 0 depending on this. In the case of timeout 0 is returned. The CLI output from the command is then only accessible from $self-&gt;{CMDRESULTS}. The idea of this function is to remove the parsing for ok and error from every CLI command call.</pre>
+<p>ARGUMENTS:</p>
+<pre>
+    1. The command to be issued to the CLI
+    2. Timeout.
+    3. Failure string</pre>
+<p>PACKAGE:</p>
+<pre>
+    Genband::SBC</pre>
+<p>GLOBAL VARIABLES USED:</p>
+<pre>
+    None</pre>
+<p>EXTERNAL FUNCTIONS USED:</p>
+<pre>
+    None</pre>
+<p>OUTPUT:</p>
+<pre>
+
+    1 - sucess
+    0 - timeout/unknown cli/error string</pre>
+<pre>
+    $self-&gt;{CMDRESULTS} - CLI output
+    $self-&gt;{LASTCMD}    - CLI command issued</pre>
+<p>EXAMPLE:</p>
+<pre>
+    my @result = $obj-&gt;execCliCmd( &quot;cli ram&quot; , 10 );</pre>
+</dd>
+</dl>
+<p></p>
+<p>
+</p>
+<h3><a name="genabnd__sbc__execshellcmd__">Genabnd::SBC::execShellCmd()</a></h3>
+<dl>
+<dt>
+<dd>
+<p>DESCRIPTION:</p>
+<pre>
+    The function is a wrapper around execCmd for the SBC linux shell. The function issues a command then issues echo $? to check for a return value. The function will then return 1 or 0 depending on whether the echo command yielded 0 or not. Ie. in the shell 0 is pass (and so the perl function returns 1) any other value is fail (and so the perl function returns 0). In the case of timeout 0 is returned. The command output from the command is then accessible from $self-&gt;{CMDRESULTS}.</pre>
+<p>ARGUMENTS:</p>
+<pre>
+    1. The command to be issued to the CLI</pre>
+<p>PACKAGE:
+    Genband::SBC</p>
+<p>GLOBAL VARIABLES USED:</p>
+<pre>
+
+    None</pre>
+<p>EXTERNAL FUNCTIONS USED:</p>
+<pre>
+
+    None</pre>
+<p>OUTPUT:</p>
+<pre>
+    1 - success
+    0 - failure</pre>
+<pre>
+    $self-&gt;{CMDRESULTS} - CLI output
+    $self-&gt;{LASTCMD}    - CLI command issued</pre>
+<p>EXAMPLE:</p>
+<pre>
+    my @result = $obj-&gt;execShellCmd( &quot;ls /opt/&quot; );</pre>
+</dd>
+</dl>
+<p>
+</p>
+<h3><a name="genabnd__sbc__execsystemclicmd">Genabnd::SBC::execSystemCliCmd</a></h3>
+<dl>
+<dt>
+<dd>
+<p>DESCRIPTION:</p>
+<pre>
+    This function is a wrapper to execute a command through CLI. It checks the [y/n] after issuing a system command. If the prompt is [y/n], this function will issue 'y' and then it will check the prompt.</pre>
+<p>ARGUMENTS:</p>
+<pre>
+    CLI command
+    Confirm String {y/n}
+    timeout value</pre>
+<p>NOTE:</p>
+<pre>
+    None</pre>
+<p>PACKAGE:</p>
+<pre>
+    None</pre>
+<p>GLOBAL VARIABLES USED:</p>
+<pre>
+    None</pre>
+<p>EXTERNAL FUNCTIONS USED:</p>
+<pre>
+    None</pre>
+<p>OUTPUT:</p>
+<pre>
+    0 - fail
+    1 - success</pre>
+<p>EXAMPLE:</p>
+<pre>
+    For example, to execute a system restart command
+    $obj-&gt;execSystemCliCmd(&quot;some cmd&quot;);</pre>
+</dd>
+</dl>
+<p>
+</p>
+<h3><a name="genabnd__sbc__closeconn">Genabnd::SBC::closeConn</a></h3>
+<dl>
+<dt>
+<dd>
+<pre>
+    $obj-&gt;closeConn();
+
+</pre>
+<pre>
+    Overriding the Base.closeConn due to it thinking us using port 2024 means we're on the console.
+
+</pre>
+</dd>
+</dl>
+
+</body>
+
+</html>

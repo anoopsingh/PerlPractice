@@ -1,0 +1,7 @@
+Strings containing only a's and b's.
+Strings that do not contain white space.
+Strings with exactly one word regardless of white space.
+Strings that end with the same character they start with.
+Like 1. but the number of a's should be even.
+Any string.
+No string, not even the empty string. 

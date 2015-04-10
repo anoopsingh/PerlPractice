@@ -1,0 +1,17 @@
+[2014/10/13 01:39:46]|399|Genband.Scheduler.Scheduler| - [0,0]
+[2014/10/13 01:49:58]|714|Genband.Scheduler.Scheduler| - ***************************************************************************
+[2014/10/13 01:49:58]|715|Genband.Scheduler.Scheduler| - executeJob:Thread:threads->tid() Test KickOff Failed --5664c6c2-529b-11e4-835c-00155d361715
+[2014/10/13 01:49:58]|716|Genband.Scheduler.Scheduler| - ***************************************************************************
+[2014/10/13 01:49:59]|363|Genband.Scheduler.Scheduler| - iteration:1 COMPLETE!
+[2014/10/13 01:57:18]|399|Genband.Scheduler.Scheduler| - [0,0]
+[2014/10/13 03:24:13]|363|Genband.Scheduler.Scheduler| - iteration:2 COMPLETE!
+[2014/10/13 03:28:52]|399|Genband.Scheduler.Scheduler| - [0,0]
+[2014/10/13 03:30:24]|714|Genband.Scheduler.Scheduler| - ***************************************************************************
+[2014/10/13 03:30:24]|715|Genband.Scheduler.Scheduler| - executeJob:Thread:threads->tid() Test KickOff Failed --949fffc2-52aa-11e4-835c-00155d361715
+[2014/10/13 03:30:24]|716|Genband.Scheduler.Scheduler| - ***************************************************************************
+[2014/10/13 03:30:26]|363|Genband.Scheduler.Scheduler| - iteration:3 COMPLETE!
+[2014/10/13 03:36:59]|399|Genband.Scheduler.Scheduler| - [0,0]
+[2014/10/13 03:48:57]|714|Genband.Scheduler.Scheduler| - ***************************************************************************
+[2014/10/13 03:48:57]|715|Genband.Scheduler.Scheduler| - executeJob:Thread:threads->tid() Test KickOff Failed --b70edebc-52ab-11e4-835c-00155d361715
+[2014/10/13 03:48:57]|716|Genband.Scheduler.Scheduler| - ***************************************************************************
+[2014/10/13 03:49:03]|363|Genband.Scheduler.Scheduler| - iteration:4 COMPLETE!

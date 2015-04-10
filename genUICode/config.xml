@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone='yes'?>
+<configuration>
+    <!-- BEGIN: Application Specific Attributes -->
+    <companytitle>GENBAND</companytitle>
+    <web_server_document_root>/srv/www/vhosts/gensmart/</web_server_document_root>
+    
+    <!-- BEGIN: DB specific attributes -->
+    <rdbms>mysql</rdbms>
+    <host>localhost</host>
+    <readonlyhost>localhost</readonlyhost>
+    <schema>genSmart</schema>
+    <!-- This user is for reads, writes, and updates on database.  Permissions for delete should not be granted to this user -->
+    <user>root</user>
+    <pass>genband</pass> 
+    <!-- END: DB specific attributes -->
+    
+    <DEBUGLVL>1</DEBUGLVL>
+    <version>1.0</version>
+    <RELEASE>V8.1.1,V8.2.1,V8.3.0,V8.3.1,V8.3.2,V8.4.0,V9.0.0,V10.0.0</RELEASE>
+    <NXTEST>r8-1a-BT-pre89,r8-1a-pre90-BT,r8-2a-pre92,r8-1.1a-pre90-BT,r8-1a-pre89,r8-2a-pre91,r8-3-pre01</NXTEST>
+    <INSTALL>SBC,NXTEST</INSTALL>
+    <DUT>SBC</DUT>
+    <DUTTYPE>SBC,SBC_HA</DUTTYPE>
+    <PLATFORM>annapolis,jarell,sandybridge1u,sandybridge2u,sandybridgedsp,q21</PLATFORM>
+    <LOADBULKCONFIG>Calling Routes,Calling Plans,Vnets,Realms,End Points</LOADBULKCONFIG>
+    <SESSDEBUGLVL>1</SESSDEBUGLVL>
+</configuration>

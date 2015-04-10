@@ -1,0 +1,7 @@
+[2014/10/06 06:06:30]|399|Genband.Scheduler.Scheduler| - [0,0]
+[2014/10/06 06:08:08]|896|Genband.Installer.installNxtest()| - Genband::Installer.installNxtest()  Nextest installation completed
+[2014/10/06 06:08:35]|896|Genband.Scheduler.Scheduler| - 1
+[2014/10/06 13:11:46]|714|Genband.Scheduler.Scheduler| - ***************************************************************************
+[2014/10/06 13:11:46]|715|Genband.Scheduler.Scheduler| - executeJob:Thread:threads->tid() Test KickOff Failed --71101edc-4d40-11e4-835c-00155d361715
+[2014/10/06 13:11:46]|716|Genband.Scheduler.Scheduler| - ***************************************************************************
+[2014/10/06 13:11:49]|363|Genband.Scheduler.Scheduler| - iteration:1 COMPLETE!

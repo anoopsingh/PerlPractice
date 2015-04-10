@@ -1,0 +1,389 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>SBCHELPER</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:none" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#requires">REQUIRES</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<ul>
+
+		<li><a href="#methods">METHODS</a></li>
+		<ul>
+
+			<li><a href="#genband__sbc__sbchelper__sbcinit">Genband::SBC::SBCHELPER::sbcInit</a></li>
+			<li><a href="#genband__sbc__sbchelper__verifysigports">Genband::SBC::SBCHELPER::verifySigPorts</a></li>
+			<li><a href="#genband__sbc__sbchelper__verifyhkports">Genband::SBC::SBCHELPER::verifyHkports</a></li>
+			<li><a href="#genband__sbc__sbchelper__checkscmstatus">Genband::SBC::SBCHELPER::checkScmStatus</a></li>
+			<li><a href="#genband__sbc__sbchelper__promptconfirmexeccmd">Genband::SBC::SBCHELPER::promptConfirmExecCmd</a></li>
+			<li><a href="#genband__sbc__sbchelper__validatecmdoutput">Genband::SBC::SBCHELPER::validateCmdOutput</a></li>
+			<li><a href="#genband__sbc__sbchelper__restartall">Genband::SBC::SBCHELPER::restartAll</a></li>
+			<li><a href="#genband__sbc__sbchelper__checkforcore">Genband::SBC::SBCHELPER::checkForCore</a></li>
+		</ul>
+
+	</ul>
+
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Genband::SBC::SBCHELPER - Perl module for SBC interaction, this module mainly contains all the helper function for base class SBC.pm</p>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Ramesh Pateel (Ram)</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+   use ATS;  # This is the base class for Automated Testing Structure</pre>
+<pre>
+   my $obj = Genabnd::SBC-&gt;new(-OBJ_HOST =&gt; '[ HOSTNAME | IP ADDRESS ]',
+                               -OBJ_USER =&gt; '&lt;cli user name&gt;',
+                               -OBJ_PASSWORD =&gt; '&lt;cli user password&gt;',
+                               -OBJ_COMMTYPE =&gt; '[ TELNET | SSH ]',
+                               -OBJ_PORT =&gt; '&lt;port&gt;'
+                               );</pre>
+<pre>
+   NOTE: port 22 for access to the Linux shell</pre>
+<p>
+</p>
+<hr />
+<h1><a name="requires">REQUIRES</a></h1>
+<p>Perl5.8.6, Log::Log4perl, Genband::Base, Genband::Utils, Genband::SBC Data::Dumper, POSIX</p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<pre>
+   This module contains all the helper function for base class SBC.pm.</pre>
+<p>
+</p>
+<h2><a name="methods">METHODS</a></h2>
+<p></p>
+<p>
+</p>
+<h3><a name="genband__sbc__sbchelper__sbcinit">Genband::SBC::SBCHELPER::sbcInit</a></h3>
+<dl>
+<dt>
+<dd>
+<p>DESCRIPTION:</p>
+<pre>
+    This method cleanup the database, install the licences and validate the signaling state
+    Does the below steps
+        - stop sbc services on active/standby or stadalone servers
+        - clean up the database (configurations)
+        - install the licences on request(iserver, mdevices)
+        - start sbc services on active/standby or standalone servers
+        - validate the signaling state</pre>
+<p>ARGUMENTS:</p>
+<pre>
+   Optional -
+        -skipLicence =&gt; pass to skip installation of licences
+        -timeout  =&gt; n (seconds for command timeout)
+        -sleep    =&gt; n (seconds to sleep after allstart)</pre>
+<p>GLOBAL VARIABLES USED:</p>
+<pre>
+    None</pre>
+<p>EXTERNAL FUNCTIONS USED:</p>
+<pre>
+    None</pre>
+<p>OUTPUT:
+        1                - if success (link detected -yes)
+        0                - if failure</p>
+<p>EXAMPLE:</p>
+<pre>
+   unless ($self-&gt;sbcInit( )) {
+      $logger-&gt;error(__PACKAGE__ . &quot;.$sub:  failed to initialize sbc&quot; );
+      return 0;
+   }</pre>
+<p>NOTE:
+    Method operates on both the nodes on HA</p>
+<pre>
+
+=back</pre>
+<p></p>
+</dd>
+</dl>
+<p>
+</p>
+<h3><a name="genband__sbc__sbchelper__verifysigports">Genband::SBC::SBCHELPER::verifySigPorts</a></h3>
+<dl>
+<dt>
+<dd>
+<p>DESCRIPTION:
+    This method will verify the sbc signaling ports link status, check the link detection of eth2 and eth3 interfaces, return true in case if both the interface link detected in active/standby in case HA and only one ce in case of standalone.</p>
+<p>ARGUMENTS:
+   Optional -
+        -activeOnly =&gt; check the link status in only active CE in case of HA</p>
+<p>GLOBAL VARIABLES USED:</p>
+<pre>
+    None</pre>
+<p>EXTERNAL FUNCTIONS USED:</p>
+<pre>
+    None</pre>
+<p>OUTPUT:
+        1                - if success (link detected -yes)
+        0                - if failure</p>
+<p>EXAMPLE:</p>
+<pre>
+   unless ($self-&gt;verifySigPorts( )) {
+      $logger-&gt;error(__PACKAGE__ . &quot;.$sub:  SBC signaling ports are down&quot; );
+      return 0;
+   }</pre>
+</dd>
+</dl>
+<p></p>
+<p>
+</p>
+<h3><a name="genband__sbc__sbchelper__verifyhkports">Genband::SBC::SBCHELPER::verifyHkports</a></h3>
+<dl>
+<dt>
+<dd>
+<p>DESCRIPTION:
+    This method will verify the sbc HK ports status, return true if all the hk ports are up.</p>
+<p>ARGUMENTS:
+   Optional -
+        -activeOnly =&gt; check the link status in only active CE in case of HA</p>
+<p>GLOBAL VARIABLES USED:</p>
+<pre>
+    None</pre>
+<p>EXTERNAL FUNCTIONS USED:</p>
+<pre>
+    None</pre>
+<p>OUTPUT:
+        1                - if success (link detected -yes)
+        0                - if failure</p>
+<p>EXAMPLE:</p>
+<pre>
+   unless ($self-&gt;verifyHkports( )) {
+      $logger-&gt;error(__PACKAGE__ . &quot;.$sub:  SBC hk ports are down&quot; );
+      return 0;
+   }</pre>
+</dd>
+</dl>
+<p></p>
+<p>
+</p>
+<h3><a name="genband__sbc__sbchelper__checkscmstatus">Genband::SBC::SBCHELPER::checkScmStatus</a></h3>
+<dl>
+<dt>
+<dd>
+<p>DESCRIPTION:
+    This method will check the sbc SCM status, return true if all the resources are up.</p>
+<p>ARGUMENTS:
+   Optional -
+        -activeOnly =&gt; check the SCM status in only active CE in case of HA</p>
+<p>GLOBAL VARIABLES USED:</p>
+<pre>
+    None</pre>
+<p>EXTERNAL FUNCTIONS USED:</p>
+<pre>
+    None</pre>
+<p>OUTPUT:
+        1                - if success (all resources are up)
+        0                - if failure</p>
+<p>EXAMPLE:</p>
+<pre>
+   unless ($self-&gt;checkScmStatus()) {
+      $logger-&gt;error(__PACKAGE__ . &quot;.$sub:  SBC hk ports are down&quot; );
+      return 0;
+   }</pre>
+</dd>
+</dl>
+<p></p>
+<p>
+</p>
+<h3><a name="genband__sbc__sbchelper__promptconfirmexeccmd">Genband::SBC::SBCHELPER::promptConfirmExecCmd</a></h3>
+<dl>
+<dt>
+<dd>
+<p>DESCRIPTION:
+    This method will run the cli and take care of user input prompts and repective confirmation( with help of parameters passed)</p>
+<p>ARGUMENTS:
+   Manditory -
+        -cmd =&gt; cli cmd
+        -prompts =&gt; array ref of the prompt matching
+        -confirm =&gt; array ref all the confirmation value in matching order to &quot;-prompts&quot; array
+   Optional -
+        -timeout =&gt; waitfor timeput value in seconds</p>
+<p>GLOBAL VARIABLES USED:</p>
+<pre>
+    None</pre>
+<p>EXTERNAL FUNCTIONS USED:</p>
+<pre>
+    None</pre>
+<p>OUTPUT:
+        1                - success
+        0                - failure</p>
+<p>NOTE - only .* is a valid regex, rest all the specail characters are escaped</p>
+<p>EXAMPLE:</p>
+<pre>
+   unless ($self-&gt;promptConfirmExecCmd( -cmd =&gt; 'nxconfig.pl -m /root/mdevices.xml',
+                                        -prompts =&gt; ['Please enter the hostname for mdevices.xml.*:', '(y/n).*:', 'iServer restart (y/n).*:'],
+                                        -confirm =&gt; ['','y','y'])) {
+      $logger-&gt;error(__PACKAGE__ . &quot;.$sub:  \'nxconfig.pl -m /root/mdevices.xml\' execution failed&quot; );
+      return 0;
+   }</pre>
+</dd>
+</dl>
+<p></p>
+<p>
+</p>
+<h3><a name="genband__sbc__sbchelper__validatecmdoutput">Genband::SBC::SBCHELPER::validateCmdOutput</a></h3>
+<dl>
+<dt>
+<dd>
+<p>DESCRIPTION:
+    This method is used to valide any command output again expected pattern</p>
+<pre>
+
+ARGUMENTS:
+   Manditory -
+        -cmd =&gt; cli/shell command
+        -pattern =&gt; array reference of pattens (required order)</pre>
+<pre>
+
+GLOBAL VARIABLES USED:</pre>
+<pre>
+
+    None</pre>
+<pre>
+
+EXTERNAL FUNCTIONS USED:</pre>
+<pre>
+
+    None</pre>
+<pre>
+
+OUTPUT:
+        1                - if success
+        0                - if failure</pre>
+<pre>
+
+EXAMPLE:</pre>
+<pre>
+
+   unless ($self-&gt;validateCmdOutput( -cmd =&gt;lstat , -pattern =&gt; ['Used Media Routed VPORTS\s*40\d\d] )) {
+      $logger-&gt;error(__PACKAGE__ . &quot;.$sub:  verification success&quot; );
+      return 0;
+   }</pre>
+</dd>
+</dl>
+<p></p>
+<p>
+</p>
+<h3><a name="genband__sbc__sbchelper__restartall">Genband::SBC::SBCHELPER::restartAll</a></h3>
+<dl>
+<dt>
+<dd>
+<p>DESCRIPTION:</p>
+<pre>
+    This method is used to restart sbc(s) services (allstart/allstop)
+ 
+ARGUMENTS:</pre>
+<pre>
+   Optional -
+        -timeout =&gt; command timeout, default 300
+        -sleep =&gt; sleep time after the starting the services, default 60
+ 
+GLOBAL VARIABLES USED:
+ 
+    None
+ 
+EXTERNAL FUNCTIONS USED:
+ 
+    None
+ 
+OUTPUT:
+        1                - if success
+        0                - if failure
+ 
+EXAMPLE:
+ 
+   unless ($self-&gt;restartAll( )) {
+      $logger-&gt;error(__PACKAGE__ . &quot;.$sub:  verification success&quot; );
+      return 0;
+   }
+   
+NOTE:</pre>
+<pre>
+    Method operates on both the nodes on HA</pre>
+</dd>
+</dl>
+<p></p>
+<p>
+</p>
+<h3><a name="genband__sbc__sbchelper__checkforcore">Genband::SBC::SBCHELPER::checkForCore</a></h3>
+<dl>
+<dt>
+<dd>
+<p>DESCRIPTION:</p>
+<pre>
+    This method will check for core in SBC(s)
+ 
+ARGUMENTS:
+
+</pre>
+<pre>
+    None
+ 
+GLOBAL VARIABLES USED:
+ 
+    None
+ 
+EXTERNAL FUNCTIONS USED:
+ 
+    None
+ 
+OUTPUT:
+        1                - if success
+        0                - if failure
+ 
+EXAMPLE:
+ 
+   unless ($self-&gt;checkForCore( )) {
+      $logger-&gt;error(__PACKAGE__ . &quot;.$sub:  verification success&quot; );
+      return 0;
+   }
+
+</pre>
+<pre>
+   
+NOTE:
+    Method operates on both the nodes on HA
+
+</pre>
+</dd>
+</dl>
+<pre>
+
+
+
+</pre>
+
+</body>
+
+</html>

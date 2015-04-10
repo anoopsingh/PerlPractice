@@ -1,0 +1,241 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Utils</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:none" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">Name</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#important">IMPORTANT</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<li><a href="#authors">AUTHORS</a></li>
+	<ul>
+
+		<li><a href="#methods">METHODS</a></li>
+		<ul>
+
+			<li><a href="#genband__utils__error__msg__">Genband::Utils::error(&lt;msg&gt;)</a></li>
+			<li><a href="#genband__utils__logmetadata__key____info__">Genband::Utils::logMetaData(&lt;key&gt;, &lt;info&gt;)</a></li>
+			<li><a href="#genband__utils__db_connect__dbconfig__">Genband::Utils::db_connect(&lt;dbconfig&gt;)</a></li>
+			<li><a href="#genband__utils__changelogfile__">Genband::Utils::changeLogFile()</a></li>
+		</ul>
+
+	</ul>
+
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<h1><a name="name">Name</a></h1>
+<p>Genband::Utils</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+    Genband standardized Gensmart Utilities.</pre>
+<p>
+</p>
+<hr />
+<h1><a name="important">IMPORTANT</a></h1>
+<p><strong>This module is a work in progress, it should work as described, but has not undergone extensive testing.</strong></p>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>Standardized and individually callable functions used by infrastructure and test cases, under the control of Genband Automation team.</p>
+<p>
+</p>
+<hr />
+<h1><a name="authors">AUTHORS</a></h1>
+<p>Ramesh Pateel (Ram)</p>
+<p>
+</p>
+<h2><a name="methods">METHODS</a></h2>
+<p></p>
+<p>
+</p>
+<h3><a name="genband__utils__error__msg__">Genband::Utils::error(&lt;msg&gt;)</a></h3>
+<pre>
+    Standardized sub routine that is used to exit a test script, while indicating a warn result.  This function will exit the script with exit code B&lt;3&gt; or B&lt;99&gt;.
+    Warning is to be used in the case of not failure and not pass and not a warn, typically this will be a situation in which the script can not continue due to a non-requirement related
+    failure (i.e. can't continue due to hardware not available).  This error implies that the script most likely did not get to the point in which the requirement is to be tested.   
+    This method is exported globally.
+    This method will:</pre>
+<pre>
+    1. Log msg as a scalar to the current logging output (typically STDOUT) using log4perl.</pre>
+<dl>
+<dt><strong><a name="arguments" class="item">Arguments:</a></strong></dt>
+
+<dd>
+<pre>
+    msg &lt;Array/Scalar&gt;
+    An array or scalar.  If this is an array - it will be concatenated for log output (as a scalar)</pre>
+</dd>
+<dt><strong><a name="returns" class="item">Returns:</a></strong></dt>
+
+<dd>
+<pre>
+    3   - ATS Unix signal for error
+    99  - ATS Unix signal for processing error</pre>
+</dd>
+<dt><strong><a name="example" class="item">Example(s):</a></strong></dt>
+
+<dd>
+<pre>
+    C&lt;&amp;error(&quot;HARDWARE MISSING&quot;);&gt;
+    C&lt;&amp;Genband::Utils::error([&quot;HARDWARE MISSING&quot;,&quot;PNS40 CARD IS REQUIRED, NOT FOUND&quot;]);&gt;</pre>
+</dd>
+</dl>
+<p></p>
+<p>
+</p>
+<h3><a name="genband__utils__logmetadata__key____info__">Genband::Utils::logMetaData(&lt;key&gt;, &lt;info&gt;)</a></h3>
+<pre>
+    Store meta data information for use in result reporting.  Useful for recording information regarding DUTs, protocol information, and
+    various other information pieces.  This function is called automatically by all Genband Objects to record Version and Build information.
+    This method is exported globally.</pre>
+<dl>
+<dt><strong><a name="arguments2" class="item">Arguments:</a></strong></dt>
+
+<dd>
+<pre>
+    key &lt;Scalar&gt;
+    The unique key in which to group this meta data information.  Key can be used repeatedly - all information below each key is stored in an array.</pre>
+<pre>
+    info &lt;Array/Scalar&gt;
+    Informational data to be stored under provided key.  The data is push onto the stack below the key.</pre>
+</dd>
+<dt><strong><a name="returns2" class="item">Returns:</a></strong></dt>
+
+<dd>
+<pre>
+    Nothing</pre>
+</dd>
+<dt><strong>Example:</strong></dt>
+
+<dd>
+<pre>
+    C&lt;&amp;logMetaData(&quot;DUTINFO&quot;,&quot;DUT TYPE: &quot;. $self-E&lt;gt&gt;{OBJTYPE}); &gt;</pre>
+</dd>
+</dl>
+<p></p>
+<p>
+</p>
+<h3><a name="genband__utils__db_connect__dbconfig__">Genband::Utils::db_connect(&lt;dbconfig&gt;)</a></h3>
+<pre>
+    Provides a connection to the ATS database system.  This sub-routine uses a configuration file, which should be located in one of the locations indicated below.
+    This sub-routine will attempt the first, then second location, always in that order.
+    This method is exported globally.</pre>
+<pre>
+    B&lt;DB Configurations:&gt;
+    
+    FIRST: /gats/conf/atsconfig.xml</pre>
+<dl>
+<dt><strong><a name="arguments3" class="item">Arguments:</a></strong></dt>
+
+<dd>
+<pre>
+    dbconfig &lt;Scalar&gt;
+    This should be one of the following standard configuration indicators:</pre>
+<pre>
+        1. RODATABASE - which is a pointer to the locally slaved database.  All operations that do not 'write' to the master should use this configuration
+        2. DATABASE - which is a pointer to the global ATS database (MASTER).  Only queries that require write access should use this configuration</pre>
+</dd>
+<dt><strong><a name="returns3" class="item">Returns:</a></strong></dt>
+
+<dd>
+<pre>
+    DBI Object (dbh) - the database connection handle.  This object will be C&lt;undef&gt; if the connection is not successful.</pre>
+</dd>
+<dt><strong>Example(s):</strong></dt>
+
+<dd>
+<pre>
+    C&lt;my $dbh = &amp;db_connect('RODATABASE');&gt;
+    C&lt;my $dbh = &amp;Genband::Utils::db_connect('RODATABASE');&gt;</pre>
+</dd>
+</dl>
+<p></p>
+<p>
+</p>
+<h3><a name="genband__utils__changelogfile__">Genband::Utils::changeLogFile()</a></h3>
+<pre>
+   This subroutine changes the current log file. This can be used, if a log file needs to be
+   changed during the execution of a script.</pre>
+<dl>
+<dt><strong><a name="arguments4" class="item">Arguments:</a></strong></dt>
+
+<dd>
+<pre>
+   Mandatory :
+   -appenderName      =&gt; Appender name. Refer NOTES section for more information
+   -newLogFile        =&gt; New log file</pre>
+</dd>
+<dt><strong><a name="package" class="item">Package:</a></strong></dt>
+
+<dd>
+<pre>
+   Genband::Utils</pre>
+</dd>
+<dt><strong><a name="global_variables_used" class="item">Global Variables Used:</a></strong></dt>
+
+<dd>
+<pre>
+   None</pre>
+</dd>
+<dt><strong><a name="output" class="item">Output:</a></strong></dt>
+
+<dd>
+<pre>
+   None</pre>
+</dd>
+<dt><strong><a name="example2" class="item">Example:</a></strong></dt>
+
+<dd>
+<pre>
+   my $newLog  = &quot;$log_dir/Automation_log-$a{-testId}.$timestamp&quot;;
+   Genband::Utils::changeLogFile(-appenderName =&gt; &quot;AutomationLog&quot;, -newLogFile =&gt; $newLog);</pre>
+</dd>
+<dt><strong><a name="notes" class="item">Notes:</a></strong></dt>
+
+<dd>
+<pre>
+   When the Appender class is created for logger, the following needs to be mentioned</pre>
+<pre>
+   # Create the Automation appender and point it to a log file
+   my $automationAppender = Log::Log4perl::Appender-&gt;new(
+                                                         &quot;Log::Log4perl::Appender::File&quot;,
+                                                         filename =&gt; &quot;$log_dir/Automation_log.$timestamp&quot;,
+                                                         name =&gt; &quot;AutomationLog&quot;,
+                                                       );</pre>
+<pre>
+   The name variable passed here is used as the appender name and needs to be used to 
+   access the class again in a later time. Pass this name in &quot;-appenderName&quot; varaible while
+   callng the subroutine.</pre>
+<pre>
+   Also, the class is changed here to Log::Log4perl::Appender::File from
+   Log::Dispatch::File</pre>
+</dd>
+</dl>
+<p></p>
+
+</body>
+
+</html>

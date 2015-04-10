@@ -1,0 +1,24 @@
+"SELECT regressionjob.regressionjob_uuid as id,regressionjob.regressionjob_name as label1, regressionjob.regressionjob_name as regressionjob_name,
+                regressionjob.regressionjob_username as label2, regressionjob.regressionjob_username as regressionjob_username,
+                sched_job_queue.job_Status as label3, sched_job_queue.job_Status as regressionjob_status,
+                regressionjob.regressionjob_release as label4, regressionjob.regressionjob_release as dutrelease,
+                regressionjob.regressionjob_build as label5, regressionjob.regressionjob_build as build,
+                concat(regressionjobtests.regressionjobtests_suiteuuid,'-',regressionjobtests.regressionjobtests_testcase) as label6, concat(regressionjobtests.regressionjobtests_suiteuuid,'-',regressionjobtests.regressionjobtests_testcase) as testcase,
+                sched_job_queue.automationLog as label7, sched_job_queue.automationLog as log
+                from sched_job_queue,
+                join regressionjob on (sched_job_queue.JobId = regressionjob.regressionjob_uuid)
+                join regressionjobtests on (regressionjobtests.regressionjobtests_suiteuuid = regressionsuite.regressionsuite_uuid) order by label1 ASC
+
+
+
+SELECT regressionjob.regressionjob_uuid as id,regressionjob.regressionjob_name as label1, regressionjob.regressionjob_name as regressionjob_name,
+                regressionjob.regressionjob_username as label2, regressionjob.regressionjob_username as regressionjob_username,
+                sched_job_queue.job_Status as label3, sched_job_queue.job_Status as regressionjob_status,
+                regressionjob.regressionjob_release as label4, regressionjob.regressionjob_release as dutrelease,
+                regressionjob.regressionjob_build as label5, regressionjob.regressionjob_build as build,
+                concat(regressionsuite.regressionsuite_uuid,'-',regressionsuite.regressionsuite_name) as label6, concat(regressionsuite.regressionsuite_uuid,'-',regressionsuite.regressionsuite_name) as suitename,
+                sched_job_queue.automationLog as label7, sched_job_queue.automationLog as log
+                from sched_job_queue
+                join regressionjob on (sched_job_queue.JobId = regressionjob.regressionjob_uuid)
+                join regressionjobtests on (regressionjobtests.regressionjobtests_suiteuuid = regressionsuite.regressionsuite_uuid) order by label1 ASC
+

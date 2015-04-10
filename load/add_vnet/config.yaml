@@ -1,0 +1,10 @@
+---
+
+vlanUrl: 'http://172.23.109.249/'
+action: 'delete'
+credentials:
+     username: 'admin'
+     password: 'admin'
+vlanRange:
+     start: 2224
+     end:   2225

@@ -1,0 +1,363 @@
+<?php
+  header( "Pragma: private");
+  header( "Expires: Mon, 20 Dec 1998 01:00:00 GMT" );
+  ##header( "Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT" );
+  header( "Cache-Control: s-maxage=0, no-store, no-cache, must-revalidate, post-check=0, pre-check=0" );
+  header( "Pragma: no-cache" );
+  include_once("session.php");
+  if(isset($_SESSION['USERINFO'])){
+    $tmp = $_SESSION['USERINFO'];
+    $userInfo = unserialize(base64_decode($tmp));
+    if($userInfo['userId'] == ""){
+      header("Cache-control: private");
+      session_destroy();
+      header("Location: /");      
+    }
+  }else{
+    header("Cache-control: private");
+    session_destroy();
+    header("Location: /");
+  }
+
+//  $userInfo['administrator'] = "N";  
+  header ("Content-type: application/vnd.mozilla.xul+xml; charset=utf-8");
+  echo '<' . '?xml version="1.0" encoding="iso-8859-15" ?' . '>';
+  echo '<' . '?xml-stylesheet href="chrome://global/skin/" type="text/css"?' . '>' . "";
+  echo '<' . '?xml-stylesheet href="/inc/sitedb.css" type="text/css"?' . '>' . "";
+?>
+
+<?xml-stylesheet href="spinnerUI.css" type="text/css"?>
+<?xul-overlay href="/overlay/globaljs_overlay.xul"?>
+
+<window id="objectadmin" orient="horizontal"
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        onload="UserInterface.init();">
+        
+<!-- always include this box -->
+<box id="globaljs_overlay"/>
+<!-- always include this box -->
+
+<!--  Broadcasters here -->
+<broadcasterset>
+  <broadcaster id="currentUser" value="<?php echo $userInfo['userName']; ?>"/>  
+  <?php
+  if( isset($userInfo['roleName']) && ($userInfo['roleName'] === 'admin' || $userInfo['roleName'] === 'manager')) {
+  ?>
+	<broadcaster id="adminprivileges" hidden="false" />
+	<broadcaster id="admincollapsed" collapsed="false" />
+	<broadcaster id="admindisabled" disabled="false" />
+  <?php
+  }else{
+  ?>  
+        <broadcaster id="adminprivileges" hidden="true"/>
+        <broadcaster id="admincollapsed" collapsed="true" />
+        <broadcaster id="admindisabled" disabled="true" />    
+  <?php  
+  }
+  ?>
+</broadcasterset>
+
+<groupbox flex="1">
+<caption label="Load Testing Mgmt" style="font-size:9pt;font-weight:bold;"/>
+<vbox flex="1" equalsize="always" style="overflow-x:auto; overflow-y:auto">
+    <tabbox id="userInputTabs" flex="1">
+    <tabs>
+        <tab id="load_sched_job" label="Run Load" flex="1" />
+        <tab id="load_test" observes="admindisabled" label="Create Test Case" flex="1"/>
+        <tab id="load_test" label="Saved Test Cases" flex="1"/>
+    </tabs>
+    <tabpanels flex="1">
+        <tabpanel flex="1">
+          <vbox flex="1" >
+              <grid>
+                <rows flex="1">
+                  <row>
+                    <label control="jobName">Job Name:</label>			
+                    <textbox id="jobName" value="" width="100" />	
+                  </row>
+                  <row>
+                      <label control="dut_menulist">DUT:</label>
+                        <menulist id="dut" flex="1" oncommand="
+                                UserInterface.loadMenuItems('load_testcases',
+							    {'obj':'loadJob',
+							    'method':'loadTemplates_xml',
+							    'query':'o252',
+							    'selectStr':'Select TestCase'
+							    });
+                                UserInterface.loadMenuItems('testbed_elements1',
+							    {'obj':'loadJob',
+							    'method':'loadTemplates_xml',
+							    'query':'o253',
+							    'selectStr':'Select Test Bed',
+                                'DUT': UserInterface.mlv(this.id),                                
+							    });
+                                UserInterface.loadMenuItems('testbed_elements2',
+							    {'obj':'loadJob',
+							    'method':'loadTemplates_xml',
+							    'query':'o253',
+							    'selectStr':'Select Test Bed',
+                                'DUT': UserInterface.mlv(this.id),                         
+							    });">
+                            <menupopup>
+                                <menuitem label="--SELECT DUT --" value=""/>
+                                <menuitem label="SBC" value="SBC"/>
+                            </menupopup>
+                        </menulist>
+                  </row>
+                  <row>
+                    <label value="Test Bed Elements"/>
+                    <menulist id="testbed_elements1" flex="1"> 
+                        <menupopup>
+                          <menuitem label="--SELECT TEST BED --" value=""/>
+                        </menupopup>
+                    </menulist>
+                    <menulist id="testbed_elements2" flex="1"> 
+                        <menupopup>
+                          <menuitem label="--SELECT TEST BED --" value=""/>
+                        </menupopup>
+                    </menulist>
+                  </row>
+                  <row>
+                    <label value="RELEASE"/>
+                    <menulist id="release" flex="1">
+                        <menupopup>
+                          <menuitem label="--SELECT RELEASE --" value=""/>
+                          <menuitem label="V8.1.1" value="V8.1.1"/>
+                          <menuitem label="V8.2.1" value="V8.2.1"/>
+                          <menuitem label="V8.3.0" value="V8.3.0"/>
+                          <menuitem label="V8.3.1" value="V8.3.1"/>
+                          <menuitem label="V8.3.2" value="V8.3.2"/>
+                        </menupopup>
+                    </menulist>
+                  </row>
+                  <row>
+                    <label value="Platform"/>
+                    <menulist id="platform" flex="1">
+                        <menupopup>
+                          <menuitem label="--SELECT PLATFORM --" value=""/>
+                          <menuitem label="Annapolis" value="Annapolis"/>
+                          <menuitem label="Jarell" value="Jarell"/>
+                          <menuitem label="Sandybridge-1U" value="Q10"/>
+                          <menuitem label="Sandybridge-2U" value="Sandybridge-2U"/>
+                          <menuitem label="SandyBridge -DSP" value="SandyBridge -DSP"/>
+                        </menupopup>
+                    </menulist>
+                  </row>
+                  <row>
+                    <label value="Test Case"/>
+                    <menulist id="load_testcases" flex="1"> 
+                        <menupopup>
+                          <menuitem label="--SELECT TEST CASE --" value=""/>
+                        </menupopup>
+                    </menulist>
+                  </row>
+                  <row>
+                    <label control="build">Build</label>
+                    <textbox id="build" value=""/>
+                  </row>
+
+                  <row>
+                    <label control="supportingdevices">Other Testbed Elements</label>
+                    <textbox id="supportingdevices" value=""/>
+                  </row>
+                  <row>
+                    <label control="duration">Test Duration (seconds)</label>
+                    <textbox id="duration" value=""/>
+                  </row>
+                  <row>
+                    <label control="callrate">Call Rate</label>
+                    <textbox id="callrate" value=""/>
+                  </row>
+                  <row>
+                    <label control="holdtime">Call Hold Time</label>
+                    <textbox id="holdtime" value=""/>
+                  </row>
+                  <row>
+                    <spacer/>
+                    <hbox flex="0" pack="left">
+                    <button id="clear" flex="0" label=" CLEAR " image="/imgs/icons/set1/clear.gif"/>
+                    <button id="submit" flex="0" label=" RUN " image="/imgs/icons/setpool/saveall_edit.gif" oncommand="alert(UserInterface.mlv('load_testcases'));
+                        UserInterface.requestTemplateAction('objList_template','/content/so.php',
+                            {
+                            'obj': 'loadJob',
+                            'method':'generateElementFromTemplate',
+                            'loadJob_name': document.getElementById('jobName').value,
+                            'loadJob_testbedelements': UserInterface.mlv('testbed_elements1') +  ',' + UserInterface.mlv('testbed_elements2'),
+                            'loadJob_otherTestbedelements': document.getElementById('supportingdevices').value,
+                            'loadJob_loadTest_uuid': UserInterface.mlv('load_testcases'),
+                            'dutRelease': UserInterface.mlv('release'),
+                            'dutPlatform': UserInterface.mlv('platform'),
+                            'testDuration': document.getElementById('duration').value,
+                            'callRate': document.getElementById('callrate').value,
+                            'callHoldTime': document.getElementById('holdtime').value,
+                            'Build': document.getElementById('build').value,
+                            },
+                    'refreshBtn1a');"/>
+                    </hbox>
+                  </row>
+                </rows>
+              </grid>
+          </vbox>
+        </tabpanel>
+        <tabpanel flex="1">
+          <vbox flex="1" style="margin:10px; valign:middle;">
+              <grid>
+                <rows flex="1">                         
+                  <row>
+                    <label control="testid">TestID</label>
+                    <textbox id="testid" value=""/>
+                  </row>
+                  <row>
+                    <label control="testalias">Test Case Alias</label>
+                    <textbox id="testalias" value=""/>
+                  </row>
+                  <row>
+                    <label control="requireddevices">Required Devices</label>
+                    <textbox id="requireddevices" value=""/>
+                  </row>
+                  <row>
+                    <label control="testcriteria">Test Criteria</label>
+                    <textbox id="testcriteria" value=""/>
+                  </row>
+                  <row>
+                    <label control="testdescription">Test Description</label>
+                    <textbox id="testdescription" value=""/>
+                  </row>
+                  <row>
+                    <label control="scripts">Scripts</label>
+                    <textbox id="scripts" value=""/>
+                  </row>
+                  <row>
+                    <spacer/>
+                    <hbox flex="0" pack="left">
+                    <button label=" Clear"/>
+                    <button label="F"/>
+                    </hbox>
+                  </row>
+                </rows>                                    
+              </grid>
+          </vbox>
+        </tabpanel>
+        <tabpanel flex="1">
+          <vbox flex="10">    
+              <groupbox flex="1">
+                <caption label="Load Test Cases" class="header" style="margin-top:5px;margin-bottom:5px;" />
+                <toolbox>
+                    <toolbar id="nav-toolbar">
+                      <hbox align="center">
+                        <textbox id="objList_test_filter" value=".*" 
+                             size="30" maxlength="1024" flex="1" persist="value"
+                             />			    
+			</hbox>
+                    </toolbar>
+                </toolbox>
+              </groupbox>    
+          </vbox>	  
+        </tabpanel>
+      </tabpanels>
+    </tabbox>
+</vbox>
+</groupbox>
+<splitter resizeafter="flex" resizebefore="closest" />
+<vbox flex="1" equalsize="always" style="overflow-x:auto; margin: 0px 5px 0px 5px;">
+    <vbox flex="1">
+        <tabbox id="atdtabs" flex="1">
+            <tabs>
+                <tab id="daemonstatus" label="Job Status" flex="1"/>
+                <tab id="submission" label="Job Results" flex="1" />
+            </tabs>
+            <tabpanels flex="1">
+                <tabpanel flex="1">
+                  
+                  <vbox flex="1">
+                    <vbox flex="0">
+                      <hbox flex="1">
+                      <groupbox id="groupbox2"  flex="1">
+                        <caption label="CURRENT JOB - REMOTE LOG" class="header" style="margin-top:5px;margin-bottom:5px;"/>
+                          <toolbox>
+                          <toolbar id="remote_log_textbox_toolbar">
+                            <toolbarbutton id="remote_log_toolbarbutton" class="log_refreshBtn" label="REFRESH" image="/imgs/icons/set1/refresh.gif" tooltiptext="Click to refresh remote log"/>
+                            <toolbarseparator />
+                            <toolbarbutton id="tail_log_toolbarbutton" class="refreshBtn5" label="Tail Automatio Log" image="/imgs/icons/set1/refresh.gif"  tooltiptext="Click to refresh remote log"/>                          
+                            <spacer flex="1" />
+                          </toolbar>
+                          </toolbox>
+                          <vbox flex="1" style="margin: 3px 5px 3px 5px;">
+                            <stack style="border: 0px solid black;">
+                              <textbox id="remote_log_textbox" class="plain" spellcheck="false" readonly="true" flex="1" rows="7" multiline="true" style="background-color:#000000; color:#FFFFFF;"/>
+                              <resizer dir="bottomright" style="cursor: se-resize;" element="_parent" right="5" bottom="3" width="10" height="10"/>
+                            </stack>			  
+                          </vbox>
+                      </groupbox>
+                      </hbox>
+                    </vbox>
+		    
+		    <splitter resizeafter="flex" />		    
+                    <vbox flex="1">
+                      <hbox flex="1">
+                      <groupbox id="groupbox2"  flex="1">
+                        <caption label="JOB QUEUE STATUS" class="header" style="margin-top:5px;margin-bottom:5px;"/>
+                          <toolbox>
+                          <toolbar id="jobqueue_toolbar">
+                            <toolbarbutton id="jobqueue_refreshBtn" class="refreshBtn2" label="REFRESH" image="/imgs/icons/set1/refresh.gif" />
+                            <spacer flex="1" />
+                            <checkbox id="autoRefresh" label="Auto Refresh" checked="false" disabled="true" tooltiptext="set an auto refresh flag for every 10 seconds" />
+                        <toolbarseparator />			    
+                            <box align="center" flex="0">
+                              <label control="counter10" value="Object Cnt: "/>
+                              <label id="counter10" observes="objTree_jobqueue_count"/>
+                            </box>
+                          </toolbar>
+                          </toolbox>
+                       </groupbox>
+                      </hbox>
+                    </vbox>
+                  </vbox>
+                </tabpanel>
+                <tabpanel flex="1">
+                    <vbox flex="1" style="overflow:auto">
+                      <hbox>
+                      <label value="Job Results" class="header" style="margin:2px 5px 2px 5px;"/>
+                      </hbox>
+                        <vbox flex="1">
+                            <hbox flex="0">
+                            <groupbox id="groupbox1" flex="1">
+                              <grid>
+                                <columns>
+                                  <column flex="1"/>
+                                  <column flex="2"/>
+                                </columns>
+                                <rows>
+                                </rows>
+                              </grid>
+                            </groupbox>
+                            </hbox>
+                        </vbox>
+                    </vbox>
+                    <splitter/>
+                    <vbox flex="6" style="margin: 0px 0px 0px 0px;">
+                        <vbox flex="1">
+                            <tabbox id="tabs1" flex="1">
+                                <tabs>
+                                    <tab id="graph_tab" label="GRAPH" flex="1"/>
+                                </tabs>
+                                <tabpanels flex="1">
+                                    <tabpanel flex="1">
+                                        <vbox flex="1">
+                                        <splitter/>
+                                        <vbox flex="1">
+                                        </vbox>
+                                        </vbox>
+                                    </tabpanel>
+                                    
+                                </tabpanels>
+                            </tabbox>
+                        </vbox>
+                    </vbox>
+                </tabpanel>
+            </tabpanels>
+        </tabbox>
+    </vbox>
+</vbox>
+</window>

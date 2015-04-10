@@ -1,0 +1,393 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Genband::Base - Genband namespace base/parent class</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:none" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<ul>
+
+		<li><a href="#authors">AUTHORS</a></li>
+		<li><a href="#methods">METHODS</a></li>
+		<li><a href="#new"><code> new </code></a></li>
+		<li><a href="#descself"><code> descSelf </code></a></li>
+		<li><a href="#doinitialization"><code> doInitialization </code></a></li>
+		<li><a href="#connect"><code> connect </code></a></li>
+		<li><a href="#closeconn"><code> closeConn </code></a></li>
+		<li><a href="#_commandhistory"><code> _COMMANDHISTORY </code></a></li>
+		<li><a href="#gettime"><code> getTime </code></a></li>
+		<li><a href="#destroy"><code> DESTROY </code></a></li>
+	</ul>
+
+	<li><a href="#perl_default_module_method_over_rides_">PERL default module method Over-rides:</a></li>
+	<ul>
+
+		<li><a href="#destroy"><code> DESTROY </code></a></li>
+		<li><a href="#autoload"><code> AUTOLOAD </code></a></li>
+		<li><a href="#clone"><code></code> clone</a></li>
+		<li><a href="#listmethods"><code> listMethods </code></a></li>
+		<ul>
+
+			<li><a href="#reconnect__"><code>reconnect()</code></a></li>
+			<li><a href="#getsessionloginfo__"><code>getSessionLogInfo()</code></a></li>
+			<li><a href="#switchsessionlog__"><code>switchSessionLog()</code></a></li>
+			<li><a href="#reconnectsessions__"><code>reconnectSessions()</code></a></li>
+			<li><a href="#pinghost__"><code>pingHost()</code></a></li>
+			<li><a href="#forceddestroy__"><code>forcedDestroy()</code></a></li>
+		</ul>
+
+		<li><a href="#becomeuser__"><code>becomeUser()</code></a></li>
+		<li><a href="#verifyethlink"><code> verifyEthLink </code></a></li>
+		<li><a href="#scpfile"><code> scpFile </code></a></li>
+	</ul>
+
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Genband::Base - Genband namespace base/parent class</p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+  use ATS;</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<p>Genband::Base provides an extended interface to Net::Telnet.  Many Genband namepsace objects extend Genband::Base (ISA).
+This provides them with the necessary functionality to implement different kinds of sessions (connectivity).</p>
+<p>Typically Genband::Base is not used directly - other objects should simply extend this to obtain it's functionality.</p>
+<p>
+</p>
+<h2><a name="authors_ram">AUTHORS
+Ram</a></h2>
+<p>
+</p>
+<h2><a name="methods">METHODS</a></h2>
+<p>
+</p>
+<h2><a name="new"><code> new </code></a></h2>
+<pre>
+    Notes:
+    
+    * The arguments take the form of a list of key-value pairs.
+    
+    * For a given key 'attribute', the following are equivalent: -ATTRIBUTE, ATTRIBUTE, -attribute, attribute.
+      Internally they are stored as $obj-&gt;{ATTRIBUTE}</pre>
+<pre>
+    my $obj = Genband::&lt;namespace object&gt;-&gt;new(-obj_host =&gt; &lt;object host name or IP address&gt;,
+                                                -obj_hosts =&gt; &lt;a reference to a list of object host names or IP addresses&gt;
+                                                -obj_user =&gt; &lt;object connection user id&gt;,
+                                                -obj_password =&gt; &lt;object connection user password&gt;,
+                                                -return_on_fail =&gt; &lt;boolean 0 false, 1 true (default 0)&gt; 
+                                                -comm_type =&gt; &lt;typically: SSH, SFTP, TELNET or FTP - see specific object documentation for details&gt;);</pre>
+<pre>
+    This method returns a Genband namespace object</pre>
+<pre>
+    Notes:
+    
+    -comm_type
+        Automatic fallback (TELNET &lt;-&gt; SSH and SFTP &lt;-&gt; FTP) for failed connection attempts is supported.
+        Fallback is NOT initited when a login attempt fails due to incorrect login/password or timeout on $obj-&gt;{PROMPT}
+        $obj-&gt;{COMM_TYPE} is set to the protocol that was succeffully used to establish a session;
+        e.g., when TELNET fails but SSH is successful then $obj-&gt;{COMM_TYPE} is set to SSH even though initially
+        it was set to TELNET
+        
+    -obj_host and -obj_hosts
+        When -obj_host is defined, it is prepanded (perl 'unshift' operation) to the array pointed to by reference -obj_hosts
+        Internally: $obj-&gt;{OBJ_HOSTS} is a reference and @{$obj-&gt;{OBJ_HOSTS}} is a list
+        Elements of the @{$obj-&gt;{OBJ_HOSTS}} list are used, one-by-one, to establish connection. On the first successful
+        attempt, the used address is saved as $obj-&gt;{OBJ_HOST} and no additonal connection attempts are made
+    -return_on_fail
+        Used to to determine whether to call Genband::Utils::error on failure to connect (and thus force exit from the script, the default behaviour) 
+        or to return 0 and allow the caller to do error processing (e.g. when waiting for a device to reboot). In the latter case the caller can check if
+        the returned value is a hash(success) or not using ref().
+        
+        Examples:
+        
+        my @hosts = qw/ sbc1 sbc2 /;</pre>
+<pre>
+        my $s = new Genband::Base(  -obj_host =&gt; sbc,
+                                    -obj_hosts =&gt; \@hosts,
+                                    -obj_user =&gt; root,
+                                    -obj_password =&gt; genband,
+                                    -comm_type =&gt; SSH,
+                                    -defaulttimeout =&gt; 10,
+                                );
+        or:</pre>
+<pre>
+        my $s = new Genband::Base(  -obj_host =&gt; sbc,
+                                    -obj_hosts =&gt; [ 'sbc1', 'sbc2'],
+                                    -obj_user =&gt; root,
+                                    -obj_password =&gt; genband,
+                                    -comm_type =&gt; SSH,
+                                    -defaulttimeout =&gt; 10,
+                                );</pre>
+<p>
+</p>
+<h2><a name="descself"><code> descSelf </code></a></h2>
+<pre>
+  Typical inner library usage:
+  
+  $obj-&gt;descSelf([&lt;mode: info | debug | warn | critical&gt;);
+ 
+This method is used to display a summary of object information.  This method is called automatically by C&lt; new &gt;.</pre>
+<p>This method does not return anything - it is a display method</p>
+<p>
+</p>
+<h2><a name="doinitialization"><code> doInitialization </code></a></h2>
+<pre>
+  Typical inner library usage:
+  
+  $obj-&gt;doInitialization();
+ 
+This method is empty and is typically over-ridden by the class that is extending C&lt; Genband::Base &gt;.</pre>
+<p>
+</p>
+<h2><a name="connect"><code> connect </code></a></h2>
+<pre>
+  Typical inner library usage:
+  
+  $obj-&gt;connect();</pre>
+<p>
+</p>
+<h2><a name="closeconn"><code> closeConn </code></a></h2>
+<pre>
+
+  $obj-&gt;closeConn();</pre>
+<p>
+</p>
+<h2><a name="_commandhistory"><code> _COMMANDHISTORY </code></a></h2>
+<pre>
+
+  $obj-&gt;_COMMANDHISTORY();</pre>
+<p>
+</p>
+<h2><a name="gettime"><code> getTime </code></a></h2>
+<pre>
+  $obj-&gt;getTime();</pre>
+<p>
+</p>
+<h2><a name="destroy"><code> DESTROY </code></a></h2>
+<pre>
+
+  $obj-&gt;DESTROY();</pre>
+<p>
+</p>
+<hr />
+<h1><a name="perl_default_module_method_over_rides_">PERL default module method Over-rides:</a></h1>
+<p>
+</p>
+<h2><a name="destroy"><code> DESTROY </code></a></h2>
+<pre>
+  Typical inner library usage:
+  
+  $obj-&gt;DESTROY();</pre>
+<p>
+</p>
+<h2><a name="autoload"><code> AUTOLOAD </code></a></h2>
+<pre>
+
+  $obj-&gt;AUTOLOAD();</pre>
+<p>
+</p>
+<h2><a name="clone"><code></code> clone</a></h2>
+<pre>
+
+  $obj-&gt;clone();</pre>
+<p>
+</p>
+<h2><a name="listmethods"><code> listMethods </code></a></h2>
+<pre>
+
+  $obj-&gt;listMethods(&lt;string: object type, string: version);</pre>
+<p>
+</p>
+<h3><a name="reconnect__"><code>reconnect()</code></a></h3>
+<pre>
+    This function reconnects the ATS object using its attributes 
+    which were passed in during object instantiation.</pre>
+<p>Arguments :</p>
+<pre>
+    -retry_timeout =&gt; &lt;maximum time to try reconnection (all attempts)&gt;
+    -conn_timeout  =&gt; &lt;maximum time for each connection attempt&gt;</pre>
+<p>Return Values :</p>
+<pre>
+   1 - success
+   0 - otherwise</pre>
+<p>Example :
+    $atsobj-&gt;<code>reconnect()</code></p>
+<p>Author : 
+    Ram</p>
+<p>
+</p>
+<h3><a name="getsessionloginfo__"><code>getSessionLogInfo()</code></a></h3>
+<pre>
+
+   This subroutine makes the sessionlog names and directory to put in the file</pre>
+<p>Arguments :
+   -sessionLogInfo     =&gt; An empty hash reference
+                          This will get filled in the sub with the following information
+                          sessionInputLog =&gt; &quot;/homes/&lt;user&gt;/ats_user/logs/$type-$hostName-$timeStamp-sessionInput.log&quot;
+                          sessionDumpLog =&gt; &quot;/homes/&lt;user&gt;/ats_user/logs/$type-$hostName-$timeStamp-sessionDump.log&quot;</p>
+<p>Return Values :</p>
+<pre>
+   1 - success
+   0 - otherwise</pre>
+<p>Example :
+    $atsobj-&gt;<code>getSessionLogInfo()</code></p>
+<p>Author : 
+    Ram</p>
+<p>
+</p>
+<h3><a name="switchsessionlog__"><code>switchSessionLog()</code></a></h3>
+<pre>
+
+   This subroutine will switch the session to passed directory.</pre>
+<p>Arguments :
+   Manditory -&gt; path to switch</p>
+<p>Return Values :</p>
+<pre>
+   1 - success
+   0 - Failur</pre>
+<p>Example :
+    $self-&gt;switchSessionLog( $path);</p>
+<p>
+</p>
+<h3><a name="reconnectsessions__"><code>reconnectSessions()</code></a></h3>
+<pre>
+
+   This subroutine will make reconnection of required object family.</pre>
+<p>Arguments :
+   Manditory -&gt; object family (ex -&gt; &quot;SIPP&quot;, &quot;NXTEST&quot;, &quot;SBC&quot;)</p>
+<p>Return Values :</p>
+<pre>
+        - number objects reconnected.</pre>
+<p>Example :
+    Genband::Base::reconnectSessions( 'SBC');</p>
+<p>
+</p>
+<h3><a name="pinghost__"><code>pingHost()</code></a></h3>
+<pre>
+
+   This subroutine will ping the passed ip from the machine.</pre>
+<p>Arguments :
+   Manditory -&gt; ipadress 
+   optional -&gt; source interface or ipaddress (eth1, eth2 etc)</p>
+<p>Return Values :</p>
+<pre>
+   1 -&gt; if pingable
+   0 -&gt; if ping fails</pre>
+<p>Example :</p>
+<pre>
+    $obj-&gt;pingHost(&quot;172.53.60.8&quot;);
+            or
+     $obj-&gt;pingHost(&quot;172.53.60.8&quot;, &quot;eth1&quot;);</pre>
+<p>
+</p>
+<h3><a name="forceddestroy__"><code>forcedDestroy()</code></a></h3>
+<pre>
+
+   This subroutine is use DESTROY all the uncleared sessions. Comes handy when most the session are not cleared because of which you wont be able to make furture session ( case of mega run)</pre>
+<p>Arguments :
+   NONE</p>
+<p>Return Values :
+   1
+Example :
+    Genband::Base::forcedDestroy();</p>
+<p>
+</p>
+<h2><a name="becomeuser__"><code>becomeUser()</code></a></h2>
+<pre>
+    This function will login as passed username for the linux session (default login is insight/insight)
+            
+Arguments:
+    Optional
+        -userName =&gt; user name, default is insight
+        -password =&gt; password, default is insight
+Return Value:</pre>
+<pre>
+    0 - on failure
+    1 - on success</pre>
+<p>Usage:
+    $emsObj-&gt;<code>becomeUser()</code>;</p>
+<p>
+</p>
+<h2><a name="verifyethlink"><code> verifyEthLink </code></a></h2>
+<p>DESCRIPTION:
+    This method will verify the ethernet port link status, return true if link detected.</p>
+<p>ARGUMENTS:
+   Optional -
+        ethernet (ex -&gt; eth1, eth2 etc)</p>
+<p>GLOBAL VARIABLES USED:</p>
+<pre>
+    None</pre>
+<p>EXTERNAL FUNCTIONS USED:</p>
+<pre>
+    None</pre>
+<p>OUTPUT:
+        1                - if success (link detected -yes)
+        0                - if failure</p>
+<p>EXAMPLE:</p>
+<pre>
+   unless ($self-&gt;verifyEthLink('eth1')) {
+      $logger-&gt;error(__PACKAGE__ . &quot;.$sub:  \'eth1\' is down&quot; );
+      return 0;
+   }</pre>
+<p>
+</p>
+<h2><a name="scpfile"><code> scpFile </code></a></h2>
+<p>DESCRIPTION:
+    This method is used to scp the file from remote to local and local to remote.</p>
+<p>ARGUMENTS:
+    Manditory -
+        -scpCmd -&gt; complete scp command
+        -password -&gt; remote authentication password
+    Optional -
+        -timeout -&gt; scp timeoutvalue</p>
+<p>GLOBAL VARIABLES USED:</p>
+<pre>
+    None
+
+</pre>
+<p>EXTERNAL FUNCTIONS USED:</p>
+<pre>
+    None
+
+</pre>
+<p>OUTPUT:
+        1                - if success
+        0                - if failure</p>
+<p>EXAMPLE:</p>
+<pre>
+   unless ($self-&gt;scpFile( -scpCmd = 'scp file ip@user:/destination/', -password =&gt; '*****', -timeout =&gt; 60)) {
+      $logger-&gt;error(__PACKAGE__ . &quot;.$sub:  failed to scp the file&quot; );
+      return 0;
+   }
+
+</pre>
+
+</body>
+
+</html>

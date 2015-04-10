@@ -1,0 +1,9 @@
+/etc/apache2/default-server.conf directives specific to genSmart
+
+# LimitRequestLine will allow for LONG URI get requests - this is typically required
+# for Bulk Operations (specifically BULK REVIEWS).  This typically the UserInterfacve function requestContent will take
+# advantage of this (long URI request being sent to IFRAME src attributes)
+LimitRequestLine 99999
+# LimitRequestFieldSize will allow for long form field content - typically this is utilized inside of /content/fe.php's submitForm function.
+# This is typically exercised as a part of Bulk Operations when fields are potentially populated by large CSV strings (containing UUIDS).
+LimitRequestFieldSize 99999

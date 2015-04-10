@@ -1,0 +1,48 @@
+[2014/10/07 01:46:29]|399|Genband.Scheduler.Scheduler| - [0,0]
+[2014/10/07 02:00:43]|363|Genband.Scheduler.Scheduler| - iteration:2 COMPLETE!
+[2014/10/07 02:21:38]|399|Genband.Scheduler.Scheduler| - [0,0]
+[2014/10/07 03:28:46]|714|Genband.Scheduler.Scheduler| - ***************************************************************************
+[2014/10/07 03:28:46]|715|Genband.Scheduler.Scheduler| - executeJob:Thread:threads->tid() Test KickOff Failed --31a9e08d-4dea-11e4-835c-00155d361715
+[2014/10/07 03:28:46]|716|Genband.Scheduler.Scheduler| - ***************************************************************************
+[2014/10/07 03:28:54]|363|Genband.Scheduler.Scheduler| - iteration:3 COMPLETE!
+[2014/10/07 03:34:02]|399|Genband.Scheduler.Scheduler| - [0,0]
+[2014/10/07 03:49:29]|206|Genband.Scheduler.Scheduler| - DB ERROR: insert into regressionjob values ('77851378-4df6-11e4-835c-00155d361715', 'Himanshu-13_10-job1', 'SBC', 'himanshu', 'e3ff69d8-4d3e-11e4-835c-00155d361715', 'V9.1.0', 'sandybridge1u', 'V9.1.0.0D78', '1', '1', 'nxconfig.pl -e debug-modpkt -v 4;nxconfig.pl -e debug-modsip -v 4;nxconfig.pl -e debug-modbridge -v 4;nxconfig.pl -e debug-modfce -v 4;nxconfig.pl -e debug-modtcf -v 4;nxconfig.pl -e sdebug-level -v 4', 'SMOKE', '0', NULL, '0', '0', '')
+[2014/10/07 03:49:29]|206|Genband.Scheduler.Scheduler| - DB ERROR: insert into regressionjobtests values ('77851378-4df6-11e4-835c-00155d361715', '7ec4b558-19ca-11e4-bede-00155d361715', 'seattle-atlanta')
+[2014/10/07 03:49:35]|363|Genband.Scheduler.Scheduler| - iteration:4 COMPLETE!
+[2014/10/07 03:49:35]|399|Genband.Scheduler.Scheduler| - [0,0]
+[2014/10/07 03:49:38]|504|Genband.Scheduler.Scheduler| - NO Requirements In job, removing
+[2014/10/07 03:49:49]|363|Genband.Scheduler.Scheduler| - iteration:5 COMPLETE!
+[2014/10/07 05:05:49]|399|Genband.Scheduler.Scheduler| - [0,0]
+[2014/10/07 05:53:03]|206|Genband.Scheduler.Scheduler| - DB ERROR: insert into regressionjob values ('bb0bb4d9-4e07-11e4-835c-00155d361715', 'Himanshu-13_10-job1', 'SBC', 'himanshu', 'e3ff69d8-4d3e-11e4-835c-00155d361715', 'V9.1.0', 'sandybridge1u', 'V9.1.0.0D78', '1', '1', 'nxconfig.pl -e debug-modpkt -v 4;nxconfig.pl -e debug-modsip -v 4;nxconfig.pl -e debug-modbridge -v 4;nxconfig.pl -e debug-modfce -v 4;nxconfig.pl -e debug-modtcf -v 4;nxconfig.pl -e sdebug-level -v 4', 'SMOKE', '0', NULL, '0', '0', '')
+[2014/10/07 05:53:03]|206|Genband.Scheduler.Scheduler| - DB ERROR: insert into regressionjobtests values ('bb0bb4d9-4e07-11e4-835c-00155d361715', '7f238fb9-19ca-11e4-bede-00155d361715', 'enums_045_1_45850,enums_049_1_45858,enums_063_45888,enums_009_1_45775,enums_017_1_45791,enums_033_1_45824,enums_041_1_45842,enums_025_1_45808,enums_029_1_45816,enums_060_1_45881')
+[2014/10/07 05:53:03]|206|Genband.Scheduler.Scheduler| - DB ERROR: insert into regressionjobtests values ('bb0bb4d9-4e07-11e4-835c-00155d361715', '7ec4b558-19ca-11e4-bede-00155d361715', 'seattle-atlanta')
+[2014/10/07 05:53:04]|363|Genband.Scheduler.Scheduler| - iteration:6 COMPLETE!
+[2014/10/07 05:53:04]|399|Genband.Scheduler.Scheduler| - [0,0]
+[2014/10/07 05:53:06]|504|Genband.Scheduler.Scheduler| - NO Requirements In job, removing
+[2014/10/07 05:53:17]|363|Genband.Scheduler.Scheduler| - iteration:7 COMPLETE!
+[2014/10/07 10:23:48]|399|Genband.Scheduler.Scheduler| - [0,0]
+[2014/10/07 10:24:11]|729|Genband.Installer.installNxtest()| - Genband::Installer.installNxtest(): invalid build => '0'
+[2014/10/07 10:24:11]|885|Genband.Scheduler.Scheduler| - ***************************************************************************
+[2014/10/07 10:24:11]|886|Genband.Scheduler.Scheduler| - ImageRetrieveInstall:13 IMAGE RETRIEVE AND INSTALL FAILED --8dae326a-4e2d-11e4-835c-00155d361715
+[2014/10/07 10:24:11]|887|Genband.Scheduler.Scheduler| - Contents:
+[2014/10/07 10:24:11]|888|Genband.Scheduler.Scheduler| - [
+[2014/10/07 10:24:11]|890|Genband.Scheduler.Scheduler| - 8dae326a-4e2d-11e4-835c-00155d361715
+[2014/10/07 10:24:11]|890|Genband.Scheduler.Scheduler| - NXTEST
+[2014/10/07 10:24:11]|890|Genband.Scheduler.Scheduler| - ARRAY(0x1ca9aa8)
+[2014/10/07 10:24:11]|890|Genband.Scheduler.Scheduler| - 0
+[2014/10/07 10:24:11]|890|Genband.Scheduler.Scheduler| - IND
+[2014/10/07 10:24:11]|890|Genband.Scheduler.Scheduler| - 1
+[2014/10/07 10:24:11]|890|Genband.Scheduler.Scheduler| - /gats/logs/reg/himanshu/20141007-102350/installation/
+[2014/10/07 10:24:11]|892|Genband.Scheduler.Scheduler| - ]
+[2014/10/07 10:24:11]|893|Genband.Scheduler.Scheduler| - ***************************************************************************
+[2014/10/07 10:24:11]|896|Genband.Scheduler.Scheduler| - 0
+[2014/10/07 10:24:21]|363|Genband.Scheduler.Scheduler| - iteration:8 COMPLETE!
+[2014/10/07 12:22:37]|399|Genband.Scheduler.Scheduler| - [0,0]
+[2014/10/07 13:20:53]|714|Genband.Scheduler.Scheduler| - ***************************************************************************
+[2014/10/07 13:20:53]|715|Genband.Scheduler.Scheduler| - executeJob:Thread:threads->tid() Test KickOff Failed --269de307-4e3e-11e4-835c-00155d361715
+[2014/10/07 13:20:53]|716|Genband.Scheduler.Scheduler| - ***************************************************************************
+[2014/10/07 13:21:02]|363|Genband.Scheduler.Scheduler| - iteration:9 COMPLETE!
+[2014/10/07 13:24:41]|399|Genband.Scheduler.Scheduler| - [0,0]
+[2014/10/07 13:41:24]|363|Genband.Scheduler.Scheduler| - iteration:10 COMPLETE!
+[2014/10/07 14:00:22]|399|Genband.Scheduler.Scheduler| - [0,0]
+[2014/10/07 14:17:05]|363|Genband.Scheduler.Scheduler| - iteration:11 COMPLETE!

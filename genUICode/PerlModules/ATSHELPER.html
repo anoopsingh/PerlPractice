@@ -1,0 +1,262 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>ATSHELPER</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rev="made" href="mailto:none" />
+</head>
+
+<body style="background-color: white">
+
+
+<!-- INDEX BEGIN -->
+<div name="index">
+<p><a name="__index__"></a></p>
+
+<ul>
+
+	<li><a href="#name">NAME</a></li>
+	<li><a href="#author">AUTHOR</a></li>
+	<li><a href="#important">IMPORTANT</a></li>
+	<li><a href="#synopsis">SYNOPSIS</a></li>
+	<li><a href="#description">DESCRIPTION</a></li>
+	<ul>
+
+		<li><a href="#methods">METHODS</a></li>
+		<ul>
+
+			<li><a href="#genband__atshelper__newfromalias__">Genband::ATSHELPER::newFromAlias()</a></li>
+			<li><a href="#genband__atshelper__resolvehashfromaliasarray__">Genband::ATSHELPER::resolveHashFromAliasArray()</a></li>
+			<li><a href="#genband__atshelper__populatetestbedhashfromaliaslist__">Genband::ATSHELPER::populateTestbedHashFromAliasList()</a></li>
+			<li><a href="#genband__atshelper__checkrequiredconfiguration__">Genband::ATSHELPER::checkRequiredConfiguration()</a></li>
+		</ul>
+
+	</ul>
+
+</ul>
+
+<hr name="index" />
+</div>
+<!-- INDEX END -->
+
+<p>
+</p>
+<h1><a name="name">NAME</a></h1>
+<p>Genband::ATSHELPER - Genband ATSHELPER class</p>
+<p>
+</p>
+<hr />
+<h1><a name="author">AUTHOR</a></h1>
+<p>Ramesh Pateel (Ram)</p>
+<p>
+</p>
+<hr />
+<h1><a name="important">IMPORTANT</a></h1>
+<p><strong>This module is a work in progress, it should work as described, but has not undergone extensive testing.</strong></p>
+<p>
+</p>
+<hr />
+<h1><a name="synopsis">SYNOPSIS</a></h1>
+<pre>
+    use ATS;</pre>
+<pre>
+    or:</pre>
+<pre>
+    use Genband::ATSHELPER;</pre>
+<p>
+</p>
+<hr />
+<h1><a name="description">DESCRIPTION</a></h1>
+<pre>
+    Genband::ATSHELPER provides a common interface for acting on all objects types such as SBC,SIPP etc.</pre>
+<p>
+</p>
+<h2><a name="methods">METHODS</a></h2>
+<p>
+</p>
+<h3><a name="genband__atshelper__newfromalias__">Genband::ATSHELPER::newFromAlias()</a></h3>
+<dl>
+<dt>
+<dd>
+<p>DESCRIPTION:</p>
+<pre>
+    This function attempts to resolve the Test Bed alias passed in as the first argument and creates an instance of the ATS object based on the object type passed in as the second argument. This argument is optional. If not specified the OBJTYPE will be looked up from Gensmart. As an additional check it will double check that the OBJTYPE in Gensmart corresponds with the user's entry. If not it will error. It will also add the Gensmart alias data to the object as well as the resolved alias name. It will return the ATS object if successful or undef otherwise. In addition, if the user specifies extra flags not recognised by newFromAlias, these will all be passed to Base::new on creation of the session object. That subroutine will handle the parsing of those arguments. This is primarily to enable the user to override default flags.</pre>
+<p>ARGUMENTS:</p>
+<pre>
+    Specific to newFromAlias:
+        -testbed_alias =&gt; Test Bed alias string
+        [-obj_type =&gt; ATS object type string]</pre>
+<p>PACKAGE:</p>
+<pre>
+    Genband::ATSHELPER</pre>
+<p>GLOBAL VARIABLES USED:</p>
+<pre>
+    None</pre>
+<p>EXTERNAL FUNCTIONS USED:</p>
+<pre>
+     Genband::Utils::resolve_alias()
+     Genband::SBC::new()
+     Genband::SIPP::new()
+ 
+OUTPUT:</pre>
+<pre>
+    $ats_obj_ref - ATS object if successful
+    Adds - $ats_obj_ref-&gt;{TESTBED_ALIAS_DATA} and $ats_obj_ref-&gt;{TESTBED_ALIAS_DATA}-&gt;{ALIAS_NAME}
+    exit         - otherwise</pre>
+<p>EXAMPLE:</p>
+<pre>
+    my $sbc_obj = Genband::ATSHELPER::newFromAlias(-testbed_alias =&gt; &lt;testbed alias&gt; , -obj_type =&gt; &quot;SBC&quot;);</pre>
+</dd>
+</dl>
+<p>
+</p>
+<h3><a name="genband__atshelper__resolvehashfromaliasarray__">Genband::ATSHELPER::resolveHashFromAliasArray()</a></h3>
+<dl>
+<dt>
+<dd>
+<p>DESCRIPTION:</p>
+<pre>
+    This function takes an input array of testbed aliases, iterates though them and returns back to the user a hash of all resolved testbed aliases. The leg work of this process is done by the function populateTestbedHashFromAliasList(). For further details on the format of the return hash, please see that function.</pre>
+<p>ARGUMENTS:</p>
+<pre>
+    1. An array of TestBed aliases</pre>
+<pre>
+    @TESTBED = (
+                    [ sbc32, sbc34 ],       &lt;-- SBC ha
+                    sbc35,                  &lt;-- SBC standalone
+                    NXTEST1,                &lt;-- NXTEST/SIPP
+                );</pre>
+<pre>
+    The order in which the like devices are specfied will be the order in which they are referenced once resolved.</pre>
+<p>PACKAGE:</p>
+<pre>
+    Genband::ATSHELPER</pre>
+<p>GLOBAL VARIABLES USED:</p>
+<pre>
+
+    None</pre>
+<p>EXTERNAL FUNCTIONS USED:</p>
+<pre>
+    Genband::ATSHELPER::populateTestbedHashFromAliasList()</pre>
+<p>OUTPUT:</p>
+<pre>
+     %TESTBED - TESTBED hash
+     0        - otherwise</pre>
+<p>EXAMPLE:</p>
+<pre>
+    my %TESTBED = Genband::ATSHELPER::resolveHashFromAliasArray( -input_array  =&gt; \@TESTBED );</pre>
+</dd>
+</dl>
+<p>
+</p>
+<h3><a name="genband__atshelper__populatetestbedhashfromaliaslist__">Genband::ATSHELPER::populateTestbedHashFromAliasList()</a></h3>
+<dl>
+<dt>
+<dd>
+<p>DESCRIPTION:</p>
+<pre>
+    This function takes a list of one or more testbed aliases, checks for the presence of the devices and if they exists, populates the hash %TESTBED with the testbed alias information.</pre>
+<pre>
+    The order in which the like devices are specified will be the order in which they are referenced once resolved. For all devices there is the notion of CEs (Computing Elements). The first device specified (for example the SBC CE sbc32) becomes CE0, the second device specified (sbc34) is CE1, they are both referred to as the first SBC. For single CE systems, eg. the SIPPs or Single CE SBCs, they will just be refered to as CE0 for that system.</pre>
+<pre>
+    The resulting hash per test object will be for SGXs for example:</pre>
+<pre>
+        $TESTBED{ &quot;sbc:1:ce0:hash&quot; }  =  resolved alias hash for sbc32;
+        $TESTBED{ &quot;sbc:1:ce0&quot;      }  = &quot;sbc32&quot;;
+        $TESTBED{ &quot;sbc32&quot;        }    = &quot;sbc:1:ce0&quot;; 
+        $TESTBED{ &quot;sbc:1:ce1:hash&quot; }  =  resolved alias hash for sbc34;
+        $TESTBED{ &quot;sbc:1:ce1&quot;      }  = &quot;sbc34&quot;;
+        $TESTBED{ &quot;sbc34&quot;         }   = &quot;sbc:1:ce1&quot;; 
+        $TESTBED{ &quot;sbc:1&quot;          }  = [ sbc32, sbc34 ]</pre>
+<p>NOTE:</p>
+<pre>
+    Single CEs will always be ce0.</pre>
+<pre>
+    The resulting hash will be for NXTESTs for example:</pre>
+<pre>
+        $TESTBED{ &quot;nxtest:1:ce0:hash&quot; } =  resolved alias hash for NXTEST1;
+        $TESTBED{ &quot;nxtest:1:ce0       }  = &quot;NXTEST1&quot;;
+        $TESTBED{ &quot;NXTEST1&quot;          }  = &quot;nxtest:1:ce0&quot;;
+        $TESTBED{ &quot;nxtest:1&quot;          }  = [ NXTEST1 ];</pre>
+<pre>
+    So populated in the hash is a means to get:
+    *   all aliases for that system, ie. sbc:1 contains sbc32 and sbc34, 
+    *   the names of the CEs from the index of the equipment
+    *   the TestBed information for each CE</pre>
+<p>ARGUMENTS:</p>
+<pre>
+    -alias_list  -  A list of testbed aliases, eg.</pre>
+<pre>
+               [ SBC32, SBC34 ]       &lt;-- SBC Dual CE
+               nxtest1                  &lt;-- NXTEST</pre>
+<pre>
+    -input_hash  - A reference to the hash that is to be populated with the device information</pre>
+<p>PACKAGE:</p>
+<pre>
+    Genband::ATSHELPER</pre>
+<p>GLOBAL VARIABLES USED:</p>
+<pre>
+    None</pre>
+<p>EXTERNAL FUNCTIONS USED:</p>
+<pre>
+    Genband::ATSHELPER::resolve_alias()</pre>
+<p>OUTPUT:</p>
+<pre>
+     1  - aliases successfully resolved to hash
+     0  - otherwise</pre>
+<p>EXAMPLE:</p>
+<pre>
+     populateTestbedHashFromAliasList ( -input_hash =&gt; \%TESTBED, -alias_list =&gt; [sbc32, sbc34] )
+     populateTestbedHashFromAliasList ( -input_hash =&gt; \%TESTBED, -alias_list =&gt; &quot;nxtest1&quot; )</pre>
+</dd>
+</dl>
+<p>
+</p>
+<h3><a name="genband__atshelper__checkrequiredconfiguration__">Genband::ATSHELPER::checkRequiredConfiguration()</a></h3>
+<dl>
+<dt>
+<dd>
+<p>DESCRIPTION:
+    This function verifies that the REQUIRED number of objects for the suite are available from the current TESTBED hash. This function depends on the TESTBED hash being of the format output from the resolveHashFromAliasArray function. The function ensures that the number of each device required is not more than the current count of that object type.</p>
+<p>ARGUMENTS:</p>
+<pre>
+    1. A hash reference to the REQUIRED objects hash</pre>
+<pre>
+    An array of the following form will be passed in:</pre>
+<pre>
+    %REQUIRED = (
+                    &quot;SBC&quot; =&gt; [2,2],
+                    &quot;NXTEST&quot;     =&gt; [1],
+                );</pre>
+<pre>
+    Here the quoted string is the object type as taken from genSmart, the array reflects the required number of devices.</pre>
+<pre>
+    The array is of the form: 
+        number of elements = number of device clusters; 
+        value of element   = number of computing elements required in that cluster.</pre>
+<pre>
+    So [2,2] refers to 2 required clusters, each with 2 computing elements. Ie. for the SBC, this would imply 2 Dual CE systems are required.</pre>
+<pre>
+    2. A hash reference to the TESTBED hash</pre>
+<pre>
+    This hash is created by the resolveHashFromAliasArray function. Please see that function in this module for more information.</pre>
+<p>PACKAGE:</p>
+<pre>
+    Genband::ATSHELPER</pre>
+<p>GLOBAL VARIABLES USED:</p>
+<pre>
+    None</pre>
+<p>OUTPUT:</p>
+<pre>
+    1 - Success
+    0 - Failure</pre>
+<p>EXAMPLE:</p>
+<pre>
+    Genband::ATSHELPER::checkRequiredConfiguration ( \%REQUIRED, \%TESTBED );</pre>
+</dd>
+</dl>
+
+</body>
+
+</html>
