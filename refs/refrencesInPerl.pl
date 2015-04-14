@@ -15,6 +15,7 @@ my $hash_r = \%hash;
 
 # Derefrecning the refs
 
+
 say "$$scalar_r";
 say "$array_r->[0]";
 say "$array_r->[1]";
@@ -28,3 +29,11 @@ say $hash{fruit};
 $array_r->[0] = 'changed';
 
 say $array[0];
+
+foreach ( keys %hash ) {
+    say "key $_ value $hash{$_}";
+}
+$hash_r->{key} = 'item changed';
+foreach ( keys %hash ) {
+    say "key $_ value $hash{$_}";
+}

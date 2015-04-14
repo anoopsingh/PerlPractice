@@ -13,4 +13,14 @@ $hashRef->{array} = \@array;
 $hashRef->{hash}= \%hash;
 
 say Dumper $hashRef;
-say ref($hashRef->{scalar});
+
+
+foreach (@{$hashRef->{array}}) {
+
+   say $_;
+}
+
+foreach ( keys %{$hashRef->{hash}} ) {
+
+   say "key is $_ and value is $hashRef->{hash}->{$_}";
+}
