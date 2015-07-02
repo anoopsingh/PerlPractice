@@ -26,3 +26,4 @@ my %hash = map { $_ => 1} @names;
 print Dumper \%hash;
 say Dumper \%hash;
 
+
