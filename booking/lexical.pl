@@ -5,6 +5,10 @@ use warnings;
 use 5.10.0;
 use Data::Dumper;
 
+
+#https://www.hackerrank.com/challenges/morgan-and-a-string
+
+
 my @A = qw(J A C K);
 my @B = qw(D A N I E L);
 
