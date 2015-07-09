@@ -8,29 +8,73 @@ use Data::Dumper;
 
 #https://www.hackerrank.com/challenges/morgan-and-a-string
 
+my $num_of_tests = <>;
+chomp $num_of_tests;
+my @str_input_list;
 
-my @A = qw(J A C K);
-my @B = qw(D A N I E L);
+foreach my $i ( 1 .. $num_of_tests) {
+    my $str1 = <>;
+    my $str2 = <>;
+    chomp $str1;
+    chomp $str2;
+    push(@str_input_list, uc($str1));
+    push(@str_input_list, uc($str2));
+    #say $i;
 
-my $str = undef;
+}
 
-while ( (scalar(@A) > 0) || (scalar(@B) > 0) ) {
-    if ( @A && @B ) {
-        if ( ord($A[0]) < ord($B[0]) ) {   
-            my $aa = shift(@A);
+foreach my $ii ( 1 .. $num_of_tests ) {
+    my $s1 = shift(@str_input_list);
+    my $s2 = shift(@str_input_list);
+    lexical($s1, $s2);
+}
+sub lexical {
+
+    my $list1 = shift;
+    my $list2 = shift;
+    
+    my $str = undef;
+    while ( length($list1) > 0 || (length($list2) > 0) ) {
+        if ( (length($list1) > 0) && (length($list2) > 0) ) {
+            my $list1_char1 = substr($list1,0,1); 
+            my $list2_char1 = substr($list2,0,1);
+            if ( ord($list1_char1) < ord($list2_char1) ) {   
+                substr($list1,0,1) = '';
+                $str = $str.$list1_char1; 
+            } elsif ( ord($list1_char1) > ord($list2_char1)) {
+            #} else {
+                substr($list2,0,1) = '';
+                $str = $str.$list2_char1;
+            } elsif (  ord($list1_char1) == ord($list2_char1)) {
+                my $flag = 1;
+                my $c = 1;
+                while ( $flag ) {
+                    my $l1 = substr($list1,$c,1);
+                    my $l2 = substr($list2,$c,1);
+                    if (  ord($l1) > ord($l2)) {
+                        $str = $str.$l2;    
+                        substr($list2,0,1) = '';
+                        $flag = 0;
+                    } elsif ( ord($l1) < ord($l2)) {
+                        $str = $str.$l1;    
+                        substr($list1,0,1) = '';
+                        $flag = 0;
+                    } else {
+                        $c++;
+                    }
+                    
+                }
+            }
+        }elsif ( length($list1) > 0 ) {
+            my $aa = substr($list1,0,1) ;
+            substr($list1,0,1) = '';
             $str = $str.$aa; 
-        } else {
-            my $bb = shift(@B);
+    
+        }elsif ( length($list2) > 0 ) {
+            my $bb = substr($list2,0,1);
+            substr($list2,0,1) = '';
             $str = $str.$bb;
         }
-    }elsif ( @A) {
-        my $aa = shift(@A);
-        $str = $str.$aa; 
-
-    }elsif ( @B ) {
-        my $bb = shift(@B);
-        $str = $str.$bb;
     }
+    say "$str";
 }
-say "Lexical string is $str";
-
