@@ -1,0 +1,25 @@
+i = 1 low = 0 high = 1
+0 >=0 && 1 < 6 && (b) eq (a) str = banana
+0 >=0 && 2 < 6 && (b) eq (n) str = banana
+i = 2 low = 1 high = 2
+1 >=0 && 2 < 6 && (a) eq (n) str = banana
+1 >=0 && 3 < 6 && (a) eq (a) str = banana
+1 >=0 && 3 < 6 && (a) eq (a) str = banana
+odd string --> high 3 - low 1 + 1 > maxlenngth 1
+odd string ----> satrt = 1  maxLength 3
+i = 3 low = 2 high = 3
+2 >=0 && 3 < 6 && (n) eq (a) str = banana
+2 >=0 && 4 < 6 && (n) eq (n) str = banana
+2 >=0 && 4 < 6 && (n) eq (n) str = banana
+1 >=0 && 5 < 6 && (a) eq (a) str = banana
+odd string --> high 5 - low 1 + 1 > maxlenngth 3
+odd string ----> satrt = 1  maxLength 5
+i = 4 low = 3 high = 4
+3 >=0 && 4 < 6 && (a) eq (n) str = banana
+3 >=0 && 5 < 6 && (a) eq (a) str = banana
+3 >=0 && 5 < 6 && (a) eq (a) str = banana
+i = 5 low = 4 high = 5
+4 >=0 && 5 < 6 && (n) eq (a) str = banana
+4 >=0 && 6 < 6 && (n) eq () str = banana
+Longest palidrom sunstring is :
+anana
