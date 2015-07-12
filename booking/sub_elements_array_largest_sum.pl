@@ -3,8 +3,8 @@
 use strict;
 use warnings;
 use 5.10.0;
-
-my @arr = (1, 2, -3, 3, -7, 5, 4, -1, 4, 5);
+my @arr = qw(90 -1 4 -6 3 -2 8 0 9 -1 -31 -1 60 -2 40);
+#my @arr = (1, 2, -3, 3, -7, 5, 4, -1, 4, 5);
 my $add = $arr[0];
 my $prev= $arr[0];
 
