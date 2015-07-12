@@ -13,7 +13,7 @@ my $hash_ref = {};
 while(<FH>) {
 
     chomp $_;
-    my @temp = split(" ", $_);
+    my @temp = split("[ ]+", $_);
     foreach (@temp) {
         if ( exists $hash_ref->{$_} ) {
             #say "$_ is presnet";
