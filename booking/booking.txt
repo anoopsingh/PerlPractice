@@ -146,15 +146,6 @@ foreach (sort {$hash{$b} <=> $hash{$a}} keys %hash ) {
 
 map{ $_->{name } } reverse sort { $a->{score} <=> $b->{score} } @$users
 map{ $_->{name } } reverse sort { $a->{score} == $b->{score} ? $b->{name} cmp $a->{name} : $a->{score} <=> $b->{score} } @$users
-
-
-
-
-
-
-
-
-
 my $users = [
        { name => 'John', score => 10, },
        { name => 'Bob', score => 1, },
