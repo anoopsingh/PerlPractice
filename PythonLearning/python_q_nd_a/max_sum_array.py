@@ -9,6 +9,7 @@ def max_sum(A):
         tot_max = max(tot_max,cur_max)
     return tot_max 
 a = [1, 2, -3, 3, -7, 5, 4, -1, 4, 5]
+
 #a =[-2,1,-3,4,-1,2,1,-5,4]
 aa = max_sum(a)
 print aa
