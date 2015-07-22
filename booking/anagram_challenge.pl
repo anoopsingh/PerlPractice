@@ -53,15 +53,6 @@ sub anagramCalculator {
                 }
                     
             }
-            #say "iter count $i $s1_list[$i]";
-            #if ( grep { $_ eq $s1_list[$i]}@s2_list){
-            #        say "$i found in $s1_list[$i]";
-            #        my $e = splice(@s1_list,$i,1);
-            #        #say "element removed is $e";
-            #        #say "iter count is $i ";
-            #        $i = -1;
-            #}
-            
         }
         #say Dumper \@s1_list;
         #say Dumper \@s2_list;
