@@ -5,8 +5,6 @@ use warnings;
 use 5.10.0;
 use Data::Dumper;
 
-#https://www.hackerrank.com/challenges/morgan-and-a-string
-#hhpddlnnsjfoyxpciioigvjqzfbpllssuj
 my $num_of_tests = <>;
 chomp $num_of_tests;
 my @str_input_list;
