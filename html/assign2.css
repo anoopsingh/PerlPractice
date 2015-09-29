@@ -1,0 +1,45 @@
+h1 {
+    text-align: center;
+    background-color:#ededed
+}
+h3 {
+    text-align: center;
+    word-spacing:5px;
+    color: blue;
+}
+
+a {
+     background-color: #ededed;
+     color:red
+}
+p.aa {
+
+     background-color: #ededed;
+     font-family:"arial";
+     word-spacing:2px;
+     text-indent:'left';    
+}
+span.sp {
+     text-decoration:line-through;
+     text-transform:uppercase;
+     font-size:18;
+     font-weight:bold;
+}
+span.sp1 {
+     text-transform:uppercase;
+     font-weight:bold;
+     color:red
+}
+p.bb {
+
+     background-color: #ededed;
+     font-family:"arial";
+     word-spacing:2px;
+     text-indent:'center';    
+}
+
+p#name {
+     background-color: #ededed;
+     word-spacing:2px;
+}
+

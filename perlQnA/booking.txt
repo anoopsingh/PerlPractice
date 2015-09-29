@@ -1,0 +1,373 @@
+Interview Questions
+
+    1. A file containing words. They asked me to write a program to find out most 5 repeating words.
+
+    2. Provided a set of characters and a list of words, how many of those words can we create from the input characters ?
+
+    input:
+    chars = 'atuslirabocynkebbterasiuaracnbawp'
+    words = ['car','boat','plane','bus','shuttle']
+
+    output:
+    car => 2
+    boat => 1
+    plane => 1
+    bus => 2
+    shuttle => 0  
+
+Interview Questions
+
+    How booking.com makes money?  
+
+Interview Questions
+
+    one question was as under -
+    "Symmetric Difference of Arrays"
+
+    Input: two arrays of integers
+    Output: one array of integers
+            which occur in only one (not both) arrays
+
+    Test case:
+    Input: [ 1, 7, 8, 2, 4, 5 ]
+            [ 3, 5, 1, 7, 6, 9 ]
+    Output: [ 8, 2, 4, 3, 6, 9 ]  
+
+
+
+0
+▼
+
+$m1 = [];
+$m2 = [];
+
+//O(N)
+foreach($a1 as $v) {
+    $m1[$v] = 1;
+}
+
+//O(N)
+foreach($a2 as $v) {
+    $m2[$v] = 1;
+
+    if (!isset($m1[$v])) {
+        $o[] = $v;
+    }
+}
+
+//O(N)
+foreach($a1 as $v) {
+    if (!isset($m2[$v])) {
+        $o[] = $v;
+    }
+}
+
+print_r($o);
+
+
+my @A = ( 1, 7, 8, 2, 4, 5, 10, 10 );
+my @B = ( 3, 5, 1, 7, 6, 9 );
+my $hash = +{};
+my @C;
+for ( @A ) {
+    $hash->{$_} = 1;
+}
+for ( @B ) {
+    $hash->{$_} = $hash->{$_} ? 2 : 1;
+}
+for ( keys %$hash ) {
+    push @C, $_ if $hash->{$_} == 1;
+}
+
+
+nterview Questions
+
+    You have the file with word at a single line.
+    #input sample file
+    abactor
+    abaculus
+    abacus
+    Abadite
+    .
+    .
+    Zyrenian
+
+    #Output
+    ******************a
+    **********b
+    ************************c
+
+    a) you have to count the character and create a histogram in alphabetical order.
+    b) now you have to produce a histogram with max 80 character in line in reference to max count
+    c) now same out based histrogram based on the character count  
+    7 Answers
+    You have datastructure
+    my $users = [
+        {
+            name => 'John',
+            score => 10,
+        },
+        {
+            name => 'Bob',
+            score => 1,
+        },
+        {
+            name => 'Carlos',
+            score => 5
+        },
+        {
+            name => 'Alice',
+            score => 5,
+        },
+        {
+            name => 'Donald',
+            score => 7
+        }
+    ];
+    now u have to arrange the name with highest to lower score,
+    if score is same than in alphabetical order
+
+    #expected output:
+    # John
+    # Donald
+    # Alice
+    # Carlos
+    # Bob  
+
+my %hash = () ;
+foreach (@$users) {
+    $hash{$_->{name}} = $_->{score};
+}
+
+foreach (sort {$hash{$b} <=> $hash{$a}} keys %hash ) {
+    print "$_\n";
+}
+
+
+map{ $_->{name } } reverse sort { $a->{score} <=> $b->{score} } @$users
+map{ $_->{name } } reverse sort { $a->{score} == $b->{score} ? $b->{name} cmp $a->{name} : $a->{score} <=> $b->{score} } @$users
+my $users = [
+       { name => 'John', score => 10, },
+       { name => 'Bob', score => 1, },
+       { name => 'Carlos', score => 5 },
+       { name => 'Alice', score => 5, },
+       { name => 'Donald', score => 7 }
+];
+
+foreach( sort {$b->{score} <=> $a->{score} || $a->{name} cmp $b->{name}} @$users ) { print $_->{name}, "\n"; }
+
+
+
+
+
+    Write a function to find the smaller common integer in 2 given arrays.  
+
+
+
+write a program to find first non repeated character in a string?
+
+
+
+    Implement a function to return the first n chars of a text, without breaking any word.  
+
+
+Given a text file containing the text for Hamlet (/usr/share/file.txt), return the top 5 most frequent words with count.  
+
+
+Interview Questions
+
+    How to track different types of browsers visited a site?
+    How to calculate area of a graph? (sampling)
+    How do you prioritize hotel?
+    Example of challenge, failure, success
+
+Interview Questions
+
+    Convert number above in hexadecimal
+    312312
+
+    Ex.
+    255 -> FF
+
+    254 -> 254 div 16 = 14, int(254/16) = 15. -> F, E
+
+    Later I found the detailed Division-remainder in source base http://en.wikipedia.org/wiki/Hexadecimal#Division-remainder_in_source_base  
+    1 Answer
+    You have input arrays and one output. The output one contains only the elements that are only in one of the arrays. Fallow u question is what is the complexity of problem and algorithm  
+
+
+The chess game and algorithm for a horse getting shortest path to move from one point to another.
+
+
+f the first character of this word appeared several times in this word? For example, grep "interview" from "intervinterview". How to find thousands of word from this string?
+
+
+
+
+
+
+
+
+write a function that gets a filename/file descriptor for a dictionary file and a list of chars
+and returns the biggest word that contains all the chars in the list.
+
+example:
+'/usr/share/dict/english.dict'
+
+amsterdam
+abacadabra
+asdfasdfasdfa
+
+['a','b','c']
+=> abacadabra  
+
+
+After the initial contact by recruiter I got phone interview with two programming tasks. Tasks were not so easy as expected. First one was to implement random function as it's implemented in Java. The second one was to present some sum of cash with the fixed bills of 1$, 2$, 5$, 10$ and 50$. For both I had about 20 minutes which and then I had time to ask questions about the company. All in all it was very interesting interview but I haven't passed at the end.
+
+
+Find the longest string that contains all the characters (in a given array of characters)  
+
+
+
+    Implement a function nondecreasing_subsequences() that, given a sequence of numbers such as:
+
+     [ 3,6,61,6,7,9,1,7,7,2,7,7,2,388,3,72,7 ]
+
+    ... will identify and return each contiguous sub-sequence of non-decreasing numbers. E.g. this example input should return this array-of-arrays (e.g. or list-of-lists)
+
+     [ [3,6,61],[6,7,9],[1,7,7],[2,7,7],[2,388],[3,72],[7] ]
+
+    (Each array includes a sequence of numbers that do not get smaller. The original order is unchanged.) For a visual example of a non-decreasing, see:
+    http://en.wikipedia.org/wiki/File:Monotonicity_example1.png  
+    3 Answers
+    Implement a function all_anagram_groups() that, given many input strings, will identify and group words that are anagrams of each other. An anagram is word that is just a re-arrangement of the characters of another word, like "reap" and "pear" and "a per" (whitespace is ignored). But "pear" and "rep" are not, since "rep" does not have an "a". Also, "the" and "thee" are not anagrams, because "the" only has one… Show More  
+    2 Answers
+    Write a function get_hops_from(page1, page2) that will determine the number of hyperlinks that you would need to click on to get from some page1 on the web to some other page2 on the web.
+
+    For example, if each page below links to the pages that are indented below it, e.g. page 1 links to pages 2 and 5, and page 2 links to pages 3 and 4, and page 5 links… Show More  
+    3 Answers
+
+
+sub anagram {
+    my ( $arr ) = @_;
+    my $ang = +{};
+    for( @$arr ) {
+        my $word = $_;
+        s/\s//g;
+        push @{ $ang->{ join '', sort split( //, $_ ) } }, $word;
+    }
+    return map{ $ang->{$_} } keys %$ang;
+}
+
+
+
+sub n_subs {
+    my ( $arr ) = @_;
+    my @subs = ();
+    my $pos = 0;
+    my $i;
+    for ( $i = 1; $i < scalar @$arr; $i++ ) {
+        next if $arr->[$i] >= $arr->[$i-1];
+        push @subs, [ ( @$arr )[$pos..$i-1] ];
+        $pos = $i;
+    }
+    push @subs, [ ( @$arr )[$pos..$i-1] ];
+    return \@subs;
+}
+
+Applied online. After a week have hr initial interview. First technical interview went good. After a few days hr representative scheduled another phone technical interview. That one gone notso good. After a week I've got negative email response.
+
+Interview Questions
+
+    Given 2 arrays of unsorted integers with repetitions. Find a way to output only elements that appear in one of the arrays (only unique values) 1 2 3 4 5 , 5 6 7 the result 1 2 3 4 6 7  
+    Answer Question
+    Parse a log files and get sorted list of resources usage per key
+
+    Keys File structure (log file names to key mapping)
+
+    Log1 key1
+    Log2 key2
+    Log3 key3
+    ...............
+
+    Log file structure (content of the log file mapping of resourses and return codes):
+
+    Resource 1 200
+    Resource 2 403
+    Resource 3 500
+    Resource 1 201
+    ................
+
+    The result should be ordered list of
+    Key2 , resource1, 230
+    Key3, resource 2, 205
+    ............  
+
+
+
+on site qustn 
+
+chess bard shorted path
+use of map grep
+
+- write code for determining crawler bots by analizing web server logs.
+- explain some perl code
+
+Of course they asked to evaluate runtime complexity of the written code.
+nction that merges two lists, but removing duplicate ones
+- write simple crawler without specifics(just some dfs)
+
+Also, I had onsite interviews with the following questions:
+- write code for finding shortest path on the chessboard
+- write code for composing cl
+sing cloud of tags from the text. Discussing alternative approaches and scalability issues.
+
+
+Finding the path for knight on a chessboard, although actually an easy problem, and I got a general solution, I missed a couple of corner cases.
+
+
+how to traverse directory tree to find specific file
+
+I face only one question. If you are given 2 array A={3,1,2,4} B={1,4}. Write a program to compare two arrays and create another array which holds the common values between two array! 
+
+my @A = ( 3,1,2,4,3 );
+my @B = ( 1,4,4,5,5 );
+my $hash = +{};
+my @C;
+for ( @A ) {
+    $hash->{$_} = 1;
+}
+for ( @B ) {
+    $hash->{$_} = 2 if $hash->{$_};
+}
+for ( keys %$hash ) {
+    push @C, $_ if $hash->{$_} > 1;
+}
+
+
+#!/usr/bin/perl
+
+my @a = ('3','1','2','4','44');
+my @b = ('23','44','1','4');
+
+my @res;
+foreach my $tmp1 (@a)
+{
+    foreach my $tmp2 (@b)
+    {
+        push @res, $tmp1 if ($tmp1 == $tmp2);
+    }
+
+}
+
+print "Common values @res\n";
+
+
+How is a database index implemented?
+
+    Explain map and grep functions in Perl?  
+    1 Answer
+    What does the wantarray functions do in Perl?  
+    1 Answer
+    How do you remove duplicates from an array of integers?  
+
